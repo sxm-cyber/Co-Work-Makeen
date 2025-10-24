@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <RootNamespace>MakeenCo_Work.Application</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MakeenCo-Work.Domain\MakeenCo-Work.Domain.csproj" />
+    <ProjectReference Include="..\MakeenCo-Work.Infrastructure\MakeenCo-Work.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>
