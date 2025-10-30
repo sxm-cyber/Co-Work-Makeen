@@ -1,11 +1,6 @@
 ﻿using MakeenCo_Work.Domain.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MakeenCo_Work.Infrastructure.Data
 {
@@ -13,19 +8,34 @@ namespace MakeenCo_Work.Infrastructure.Data
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
+        public DbSet<FAQ> Faqs { get; set; }
 
-        public DbSet<User>users { get; set; }
-        public DbSet<Role>roles { get; set; }
-        public DbSet<FAQ>fAQs { get; set; }
-        public DbSet<BlogPost>blogPosts { get; set; }
-        public DbSet<Content> content { get; set; }
-        public DbSet<DiscountCode> discountCodes { get; set; }
-        public DbSet<Regulation> regulation { get; set; }   
-        public DbSet<Reservation> reservation { get; set; }
+        public DbSet<BlogPost> BlogPosts { get; set; }
+
+        public DbSet<Content> Contents { get; set; }
+
+        public DbSet<DiscountCode> DiscountCodes { get; set; }
+
+        public DbSet<Regulation> Regulations { get; set; }
         
+        public DbSet<Reservation> Reservations { get; set; }
+
+        public DbSet<Space> Spaces { get; set; }
 
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
 
-
+            builder.Entity<User>().ToTable("Users");
+            builder.Entity<Role>().ToTable("Roles");
+            builder.Entity<FAQ>().ToTable("Faqs");
+            builder.Entity<BlogPost>().ToTable("BlogPosts");
+            builder.Entity<Content>().ToTable("Contents");
+            builder.Entity<DiscountCode>().ToTable("DiscountCodes");
+            builder.Entity<Regulation>().ToTable("Regulations");
+            builder.Entity<Reservation>().ToTable("Reservations");
+            builder.Entity<Space>().ToTable("Spaces");
+        }
     }
 }

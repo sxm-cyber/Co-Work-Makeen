@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 namespace MakeenCo_Work.Domain.Models
 {
-	public class User
+	public class User : IdentityUser<Guid>
 	{
-		public Guid Id { get; private set; }
 
 		[Required , MaxLength(100)]
 		public string FirstName { get; private set; }
@@ -13,25 +13,7 @@ namespace MakeenCo_Work.Domain.Models
 		[Required , MaxLength(100)]
 		public string LastName { get; private set; }
 
-
 		public string FullName => $"{FirstName} {LastName}";
-
-
-        [Required , MaxLength(200) , EmailAddress]
-		public string Email { get; private set; }
-
-
-		[Required , MaxLength(20)]
-		public string PhoneNumber { get; private set; }
-
-
-		[MaxLength(50)]
-		public string? Username { get; private set; }
-
-
-		[Required]
-		public string Password { get; private set; }
-
 
 		public string? ProfilePictureUrl { get; private set; }
 
@@ -43,10 +25,6 @@ namespace MakeenCo_Work.Domain.Models
 
 		public DateTime? LastLoginAt { get; private set; }
 
-		public Guid RoleId { get; private set; }
-
-		public Role Role { get; private set; } = null!;
-
 
 		public ICollection<Message> SentMessages { get; private set; } = new List<Message>();
 		public ICollection<Message> ReceivedMessages { get; private set; } = new List<Message>();
@@ -57,15 +35,13 @@ namespace MakeenCo_Work.Domain.Models
 		private User() { }
 
 
-		public User(string firstName , string lastName , string email , string phoneNumber , string password , Guid roleId)
+		public User(string firstName , string lastName , string email , string phoneNumber)
 		{
 			Id = Guid.NewGuid();
 			FirstName = firstName;
 			LastName = lastName;
 			Email = email;
 			PhoneNumber = phoneNumber;
-			Password = password;
-			RoleId = roleId;
 			IsActive = true;
 			CreatedAt = DateTime.UtcNow;
 			SentMessages = new List<Message>();
@@ -73,18 +49,11 @@ namespace MakeenCo_Work.Domain.Models
 			Reservations = new List<Reservation>();
 		}
 
-		public void UpdateProfile(string firstName , string lastName , string phonenNumber , string? username = null)
+		public void UpdateProfile(string firstName , string lastName , string phonenNumber)
 		{
 			FirstName = firstName;
 			LastName = lastName;
 			PhoneNumber = phonenNumber;
-			Username = username;
-			UpdatedAt = DateTime.UtcNow;
-		}
-
-		public void UpdatePassword(string password)
-		{
-			Password = password;
 			UpdatedAt = DateTime.UtcNow;
 		}
 

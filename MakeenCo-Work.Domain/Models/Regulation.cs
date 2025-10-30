@@ -14,7 +14,7 @@ namespace MakeenCo_Work.Domain.Models
 		[Required]
 		public string Content { get; private set; }
 
-		public int DisplayOrder { get; private set; }
+		//public int DisplayOrder { get; private set; }
 
 		public bool IsActive { get; private set; }
 

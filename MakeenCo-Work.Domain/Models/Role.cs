@@ -1,15 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 namespace MakeenCo_Work.Domain.Models
 {
-	public class Role
+	public class Role : IdentityRole<Guid>
 	{
-		public Guid Id { get; private set; }
-
-
-		[Required , MaxLength(50)]
-		public string Name { get; private set; }
-
 
 		[MaxLength(200)]
 		public string? Description { get; private set; }
@@ -17,8 +12,6 @@ namespace MakeenCo_Work.Domain.Models
 		public bool IsActive { get; private set; }
 
 		public DateTime CreatedAt { get; private set; }
-
-		public ICollection<User> Users { get; private set; } = new List<User>();
 
 		private Role() { }
 
@@ -30,7 +23,6 @@ namespace MakeenCo_Work.Domain.Models
 			Description = description;
 			IsActive = true;
 			CreatedAt = DateTime.UtcNow;
-			Users = new List<User>();
 		}
 
 		public void Update(string name , string? description = null)

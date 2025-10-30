@@ -22,9 +22,9 @@ namespace MakeenCo_Work.Domain.Models
 
 		public decimal? MaximumDiscount { get; private set; }
 
-		public int? UsageLimit { get; private set; }
+		//public int? UsageLimit { get; private set; }
 
-		public int UsedCount { get; private set; }
+		//public int UsedCount { get; private set; }
 
 		public DateTime ValidFrom { get; private set; }
 
