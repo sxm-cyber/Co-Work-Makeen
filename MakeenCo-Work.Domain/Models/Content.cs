@@ -67,7 +67,6 @@ namespace MakeenCo_Work.Domain.Models
 			ImageUrl = imageUrl;
 			UpdatedAt = DateTime.UtcNow;
 		}
-
 		public void Publish()
 		{
 			IsPublished = true;
