@@ -28,10 +28,12 @@ namespace MakeenCo_Work.Domain.Models
 
 		public DateTime? UpdatedAt { get; private set; }
 
-		
+		public DateTime? PublishedAt { get; private set; }
 
-		//public Guid CreatedById { get; private set; }
-		//public User CreatedBy { get; private set; } = null;
+
+		public Guid CreatedById { get; private set; }
+		public User CreatedBy { get; private set; } = null;
+		
 
 
 		private Content() { }

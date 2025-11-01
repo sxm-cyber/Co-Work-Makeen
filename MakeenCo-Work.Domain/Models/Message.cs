@@ -26,7 +26,6 @@ namespace MakeenCo_Work.Domain.Models
 
 		public DateTime? UpdateAt { get; private set; }
 
-
 		public Guid SenderId { get; private set; }
 		public User Sender { get; private set; } = null;
 

@@ -17,17 +17,19 @@ namespace MakeenCo_Work.Domain.Models
 
 		[Required]
 		public string Content { get; private set; }
+		public string  File {  get; private set; }
+		public string Category  {  get; private set; }
+		
+
+
 
 
 		public string? FeaturedImageUrl { get; private set; }
 
-		public string? Tags { get; private set; }
 
-		public string? Slug { get; private set; }
 
 		public bool IsPublished { get; private set; }
 
-		public bool IsActive { get; private set; }
 
 		public int ViewCount { get; private set; }
 
@@ -44,7 +46,7 @@ namespace MakeenCo_Work.Domain.Models
 		private BlogPost() { }
 
 
-		public BlogPost(string title , string content , Guid authorId , string? summary = null ,string? featuredImageUrl = null , string? tags = null )
+		public BlogPost(string title, string content, Guid authorId, string category, string? summary = null, string? featuredImageUrl = null, string file = null)
 		{
 			Id = Guid.NewGuid();
 			Title = title;
@@ -52,22 +54,21 @@ namespace MakeenCo_Work.Domain.Models
 			AuthorId = authorId;
 			Summary = summary;
 			FeaturedImageUrl = featuredImageUrl;
-			Tags = tags;
-			Slug = GenerateSlug(title);
 			IsPublished = false;
-			IsActive = true;
 			ViewCount = 0;
 			CreatedAt = DateTime.UtcNow;
-		}
+			File = file;
+			Category = category;
+
+        }
 
 
-		public void Update(string title , string content , string? summary = null , string? tags = null)
+		public void Update(string title , string content , string? summary = null )
 		{
 			Title = title;
 			Content = content;
 			Summary = summary;
-			Tags = tags;
-			Slug = GenerateSlug(title);
+	
 			UpdatedAt = DateTime.UtcNow;
 		}
 
@@ -94,11 +95,7 @@ namespace MakeenCo_Work.Domain.Models
 		}
 
 
-		public void SetActive(bool isActive)
-		{
-			IsActive = isActive;
-			UpdatedAt = DateTime.UtcNow;
-		}
+
 
 		public void IncrementViewCount()
 		{
@@ -107,12 +104,7 @@ namespace MakeenCo_Work.Domain.Models
 		}
 
 
-		private static string GenerateSlug(string title)
-		{
-			return title.ToLowerInvariant()
-				.Replace(" ", "-")
-				.Replace("_", "-");
-		}
+
 	}
 }
 

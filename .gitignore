@@ -11,6 +11,13 @@ autom4te.cache/
 tarballs/
 test-results/
 
+# Ignore local appsettings files (everyone has their own)
+MakeenCo-Work.API/appsettings.json
+MakeenCo-Work.API/appsettings.*.json
+
+# Ignore EF Core Migrations folder
+**/Migrations/
+
 # Mac bundle stuff
 *.dmg
 *.app
