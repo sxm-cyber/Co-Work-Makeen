@@ -10,5 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="..\MakeenCo-Work.Application\MakeenCo-Work.Application.csproj" />
     <ProjectReference Include="..\MakeenCo-Work.Domain\MakeenCo-Work.Domain.csproj" />
+    <ProjectReference Include="..\MakeenCo-Work.Infrastructure\MakeenCo-Work.Infrastructure.csproj" />
+    <ProjectReference Include="..\MakeenCo-Work\MakeenCo-Work.csproj" />
   </ItemGroup>
 </Project>
