@@ -15,37 +15,41 @@ namespace MakeenCo_Work.Domain.Models
 		[Required]
 		public string Answer { get; private set; }
 
-		public int DisplayOrder { get; private set; }
-
 		public bool IsActive { get; private set; }
 
-		public DateTime CreatedAt { get; private set; }
+        public bool PublishInMainPage { get;private set; }
+
+        public bool PublishInFrequentlyAskedQuestions { get;private set; }
+        public DateTime CreatedAt { get; private set; }
 
 		public DateTime? UpdatedAt { get; private set; }
 
 		public Guid CreatedById { get; private set; }
 		public User CreatedBy { get; private set; } = null;
+		
 
 
 		private FAQ() { }
 
 
-		public FAQ(string question , string answer , Guid createdById , int displayOrder = 0)
+		public FAQ(string question , string answer , Guid createdById)
 		{
 			Id = Guid.NewGuid();
 			Question = question;
 			Answer = answer;
 			CreatedById = createdById;
-			DisplayOrder = displayOrder;
+			PublishInFrequentlyAskedQuestions = false;
+			PublishInMainPage = false;
 			IsActive = true;
 			CreatedAt = DateTime.UtcNow;
 		}
 
-		public void Update(string question , string answer , int displayOrder)
+		public void Update(string question , string answer )
 		{
 			Question = question;
 			Answer = answer;
-			DisplayOrder = displayOrder;
+			PublishInMainPage = false;
+			PublishInFrequentlyAskedQuestions = false;
 			UpdatedAt = DateTime.UtcNow;
 		}
 
@@ -55,11 +59,7 @@ namespace MakeenCo_Work.Domain.Models
 			UpdatedAt = DateTime.UtcNow;
 		}
 
-		public void UpdateDisplayOrder(int displayOrder)
-		{
-			DisplayOrder = displayOrder;
-			UpdatedAt = DateTime.UtcNow;
-		}
+
 		
 	}
 }

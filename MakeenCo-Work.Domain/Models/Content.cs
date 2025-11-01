@@ -10,6 +10,7 @@ namespace MakeenCo_Work.Domain.Models
 
 		[Required , MaxLength(200)]
 		public string Title { get; private set; }
+		//
 
 		[MaxLength(1000)]
 		public string? Description { get; private set; }
@@ -32,6 +33,7 @@ namespace MakeenCo_Work.Domain.Models
 
 		public Guid CreatedById { get; private set; }
 		public User CreatedBy { get; private set; } = null;
+		
 
 
 		private Content() { }

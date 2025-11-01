@@ -22,6 +22,20 @@ namespace MakeenCo_Work.Infrastructure.Data
 
         public DbSet<Space> Spaces { get; set; }
 
+        public DbSet<Image> Images { get; set; }
+
+        public DbSet<WhyMakeen>WhyMakeens { get; set; }
+
+        public DbSet<MoreThanAcademy>MoreThanAcademies { get; set; }
+       
+        public DbSet<MainBaner> MainBaners { get; set; }
+
+        public DbSet<WaysOfCommunication>WaysOfCommunications { get; set; }
+
+        public DbSet<Message>Messages { get; set; }
+
+
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -36,6 +50,26 @@ namespace MakeenCo_Work.Infrastructure.Data
             builder.Entity<Regulation>().ToTable("Regulations");
             builder.Entity<Reservation>().ToTable("Reservations");
             builder.Entity<Space>().ToTable("Spaces");
+            builder.Entity<Image>().ToTable("Image");
+            builder.Entity<WhyMakeen>().ToTable("WhyMakeen");
+            builder.Entity<MoreThanAcademy>().ToTable("MoreThanAcademy");
+            builder.Entity<WaysOfCommunication>().ToTable("WaysOfCommunication");
+            builder.Entity<MainBaner>().ToTable("MainBaner");
+            builder.Entity<Message>().ToTable("Message");
+
+
+            builder.Entity<Message>()
+        .HasOne(m => m.Sender)
+        .WithMany()  // فعلاً در User لیست پیام‌ها نداریم
+        .HasForeignKey(m => m.SenderId)
+        .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Message>()
+                .HasOne(m => m.Recipient)
+                .WithMany()
+                .HasForeignKey(m => m.RecipientId)
+                .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }

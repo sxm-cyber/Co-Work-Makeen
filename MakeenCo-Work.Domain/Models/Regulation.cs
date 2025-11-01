@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace MakeenCo_Work.Domain.Models
 {
@@ -13,8 +12,6 @@ namespace MakeenCo_Work.Domain.Models
 
 		[Required]
 		public string Content { get; private set; }
-
-		//public int DisplayOrder { get; private set; }
 
 		public bool IsActive { get; private set; }
 
@@ -30,34 +27,27 @@ namespace MakeenCo_Work.Domain.Models
 		private Regulation() { }
 
 
-		public Regulation(string title , string content , Guid createdById , int displayOrder = 0)
+		public Regulation(string title , string content , Guid createdById  )
 		{
 			Id = Guid.NewGuid();
 			Title = title;
 			Content = content;
 			CreatedById = createdById;
-			DisplayOrder = displayOrder;
+		
 			IsActive = true;
 			CreatedAt = DateTime.UtcNow;
 		}
 
-		public void Update(string title , string content , int displayOrder)
+		public void Update(string title , string content)
 		{
 			Title = title;
 			Content = content;
-			DisplayOrder = displayOrder;
 			UpdatedAt = DateTime.UtcNow;
 		}
 
 		public void SetActive(bool isActive)
 		{
 			IsActive = isActive;
-			UpdatedAt = DateTime.UtcNow;
-		}
-
-		public void UpdateDisplayOrder(int displayOrder)
-		{
-			DisplayOrder = displayOrder;
 			UpdatedAt = DateTime.UtcNow;
 		}
 	}
