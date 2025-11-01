@@ -30,7 +30,6 @@ namespace MakeenCo_Work.Domain.Models
 			Name = name;
 			Description = description;
 		}
-
 		public void SetActive(bool isActive)
 		{
 			IsActive = isActive;
