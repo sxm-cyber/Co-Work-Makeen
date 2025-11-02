@@ -1,10 +1,11 @@
-﻿using MakeenCo_Work.Domain.Models;
+﻿using MakeenCo_Work.Configurations;
+using MakeenCo_Work.Domain.Models;
 using MakeenCo_Work.Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddDependency();//ادکردن سرویس ها و ریپازیتوری ها 
 // Connection string
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 

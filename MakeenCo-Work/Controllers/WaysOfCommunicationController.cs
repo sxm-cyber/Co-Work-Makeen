@@ -1,0 +1,39 @@
+﻿using MakeenCo_Work.Application.Command;
+using MakeenCo_Work.Application.IServices;
+using Microsoft.AspNetCore.Mvc;
+
+namespace MakeenCo_Work.Controllers
+{
+    [ApiController]
+    [Route("[controller]")]
+    public class WaysOfCommunicationController : ControllerBase
+    {
+        private IWaysOfCommunicationService _waysOfCommunicationService;
+        public WaysOfCommunicationController(IWaysOfCommunicationService waysOfCommunicationService)
+        {
+            _waysOfCommunicationService = waysOfCommunicationService;
+
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateAsync(
+            [FromBody] CreateWaysOfCommunicationCommand command)
+        { 
+            await _waysOfCommunicationService.CreateWaysOfCommunicationAsync(command);
+            return Ok();
+        }
+            [HttpGet]
+        public async Task<IActionResult> GetAllAsync()
+        {
+            var Resalt = await _waysOfCommunicationService.GetAllWaysOfCommunicationAsync();
+            return Ok(Resalt);
+        }
+        [HttpPut]
+        public async Task<IActionResult> UpdateAsync(
+            [FromBody] UpdateWaysOfCommunicationCommand command)
+        {
+            await _waysOfCommunicationService.UpdateWaysOfCommunicationAsync(command);
+            return Ok();
+
+        }
+    }
+}
