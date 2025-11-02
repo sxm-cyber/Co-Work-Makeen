@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using MakeenCo_Work.Domain.Enums;
 
 namespace MakeenCo_Work.Domain.Models
@@ -53,6 +52,7 @@ namespace MakeenCo_Work.Domain.Models
 			IsActive = true;
 			UsedCount = 0;
 			CreatedAt = DateTime.UtcNow;
+			UpdatedAt = DateTime.UtcNow;
 			Reservations = new List<Reservation>();
 		}
 
@@ -102,9 +102,6 @@ namespace MakeenCo_Work.Domain.Models
 			return IsActive && DateTime.UtcNow >= ValidFrom && DateTime.UtcNow <= ValidTo &&
 				(UsageLimit == null || UsedCount < UsageLimit);
 		}
-
-
-
     }
 }
 

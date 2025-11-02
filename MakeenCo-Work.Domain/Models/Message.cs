@@ -26,14 +26,17 @@ namespace MakeenCo_Work.Domain.Models
 
 		public DateTime? UpdateAt { get; private set; }
 
+
 		public Guid SenderId { get; private set; }
-		public User Sender { get; private set; } = null;
+		public User Sender { get; private set; } = null!;
 
 
 		public Guid RecipientId { get; private set; }
-		public User Recipient { get; private set; } = null;
+		public User Recipient { get; private set; } = null!;
+
 
 		private Message() { }
+
 
 		public Message(string subject , string content , Guid senderId , Guid recipientId ,
 			MessageType type = MessageType.General , MessagePriority priority = MessagePriority.Normal)

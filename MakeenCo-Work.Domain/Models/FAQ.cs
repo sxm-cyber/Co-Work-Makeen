@@ -4,7 +4,6 @@ namespace MakeenCo_Work.Domain.Models
 {
 	public class FAQ
 	{
-
 		public Guid Id { get; private set; }
 
 
@@ -20,14 +19,15 @@ namespace MakeenCo_Work.Domain.Models
         public bool PublishInMainPage { get;private set; }
 
         public bool PublishInFrequentlyAskedQuestions { get;private set; }
+
         public DateTime CreatedAt { get; private set; }
 
 		public DateTime? UpdatedAt { get; private set; }
 
+
 		public Guid CreatedById { get; private set; }
 		public User CreatedBy { get; private set; } = null;
 		
-
 
 		private FAQ() { }
 
@@ -58,9 +58,6 @@ namespace MakeenCo_Work.Domain.Models
 			IsActive = isActive;
 			UpdatedAt = DateTime.UtcNow;
 		}
-
-
-		
 	}
 }
 

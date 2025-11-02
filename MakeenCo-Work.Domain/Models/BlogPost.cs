@@ -17,19 +17,14 @@ namespace MakeenCo_Work.Domain.Models
 
 		[Required]
 		public string Content { get; private set; }
+
 		public string  File {  get; private set; }
+
 		public string Category  {  get; private set; }
-		
-
-
-
 
 		public string? FeaturedImageUrl { get; private set; }
 
-
-
 		public bool IsPublished { get; private set; }
-
 
 		public int ViewCount { get; private set; }
 
@@ -95,16 +90,11 @@ namespace MakeenCo_Work.Domain.Models
 		}
 
 
-
-
 		public void IncrementViewCount()
 		{
 			ViewCount++;
 			UpdatedAt = DateTime.UtcNow;
 		}
-
-
-
 	}
 }
 

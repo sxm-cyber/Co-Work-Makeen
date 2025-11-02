@@ -35,6 +35,7 @@ namespace MakeenCo_Work.Domain.Models
 
 		private Space() { }
 
+
 		public Space(string name , int capacity , decimal hourlyRate, decimal dailyRate, decimal monthlyRate
 			,string? description = null , string?  location = null)
 		{

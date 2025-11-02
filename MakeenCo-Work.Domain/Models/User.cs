@@ -49,11 +49,11 @@ namespace MakeenCo_Work.Domain.Models
 			Reservations = new List<Reservation>();
 		}
 
-		public void UpdateProfile(string firstName , string lastName , string phonenNumber)
-		{
+        public void UpdateProfile(string firstName, string lastName, string phoneNumber)
+        {
 			FirstName = firstName;
 			LastName = lastName;
-			PhoneNumber = phonenNumber;
+			PhoneNumber = phoneNumber;
 			UpdatedAt = DateTime.UtcNow;
 		}
 

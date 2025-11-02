@@ -59,14 +59,14 @@ namespace MakeenCo_Work.Infrastructure.Data
 
 
             builder.Entity<Message>()
-        .HasOne(m => m.Sender)
-        .WithMany()  // فعلاً در User لیست پیام‌ها نداریم
-        .HasForeignKey(m => m.SenderId)
-        .OnDelete(DeleteBehavior.Restrict);
+                .HasOne(m => m.Sender)
+                .WithMany(u => u.SentMessages)
+                .HasForeignKey(m => m.SenderId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Message>()
                 .HasOne(m => m.Recipient)
-                .WithMany()
+                .WithMany(u => u.ReceivedMessages)
                 .HasForeignKey(m => m.RecipientId)
                 .OnDelete(DeleteBehavior.Restrict);
 

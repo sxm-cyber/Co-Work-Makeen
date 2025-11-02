@@ -34,16 +34,18 @@ namespace MakeenCo_Work.Domain.Models
 
 
 		public Guid UserId { get; private set; }
-		public User User { get; private set; } = null;
+		public User User { get; private set; } = null!;
 
 		public Guid SpaceId { get; private set; }
-		public Space Space { get; private set; } = null;
+		public Space Space { get; private set; } = null!;
+
 
 		public Guid? DiscountCodeId { get; private set; }
 		public DiscountCode? DiscountCode { get; private set; }
 
 
 		private Reservation() { }
+
 
 		public Reservation(string reservationNumber , Guid userId , Guid spaceId ,
 			DateTime startDate , DateTime endDate , DateTime startTime , DateTime endTime ,
@@ -95,11 +97,6 @@ namespace MakeenCo_Work.Domain.Models
 			Notes = notes;
 			UpdatedAt = DateTime.UtcNow;
 		}
-
-
-
-
-
 	}
 }
 

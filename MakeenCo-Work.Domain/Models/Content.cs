@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using MakeenCo_Work.Domain.Enums;
 
 namespace MakeenCo_Work.Domain.Models

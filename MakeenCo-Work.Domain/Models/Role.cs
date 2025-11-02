@@ -13,6 +13,7 @@ namespace MakeenCo_Work.Domain.Models
 
 		public DateTime CreatedAt { get; private set; }
 
+
 		private Role() { }
 
 

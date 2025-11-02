@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MakeenCo_Work.Domain.Models
+﻿namespace MakeenCo_Work.Domain.Models
 {
     public class WaysOfCommunication
     {
         public Guid Id { get; private set; }
+
         public string Address { get; private set; }
+
         public string PhoneNumber { get; private set; }
 
         public string LandlineNumber { get; private set; }
@@ -25,6 +21,7 @@ namespace MakeenCo_Work.Domain.Models
 
         public WaysOfCommunication() { }
 
+
         public WaysOfCommunication(string address, string phoneNumber, string landlineNumber,
             string baleLink, string instagramLink, string linkdinLink, string makeenWebsiteLink)
         {
@@ -37,6 +34,8 @@ namespace MakeenCo_Work.Domain.Models
             MakeenWebsiteLink = makeenWebsiteLink;
             Id = Guid.NewGuid();
         }
+
+
         public void Update(string address, string phoneNumber, string landlineNumber,
             string baleLink, string instagramLink, string linkdinLink, string makeenWebsiteLink)
         {
@@ -47,9 +46,6 @@ namespace MakeenCo_Work.Domain.Models
             InstagramLink = instagramLink;
             LinkdinLink = linkdinLink;
             MakeenWebsiteLink = makeenWebsiteLink;
-
-
-
         }
     }
 }
