@@ -189,12 +189,6 @@ namespace MakeenCo_Work.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("CreatedById")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -209,12 +203,7 @@ namespace MakeenCo_Work.Infrastructure.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
 
                     b.ToTable("Faqs", (string)null);
                 });
@@ -275,21 +264,11 @@ namespace MakeenCo_Work.Infrastructure.Migrations
                     b.Property<DateTime?>("UpdateAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("UserId1")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("RecipientId");
 
                     b.HasIndex("SenderId");
-
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("UserId1");
 
                     b.ToTable("Message", (string)null);
                 });
@@ -810,38 +789,19 @@ namespace MakeenCo_Work.Infrastructure.Migrations
                     b.Navigation("CreatedBy");
                 });
 
-            modelBuilder.Entity("MakeenCo_Work.Domain.Models.FAQ", b =>
-                {
-                    b.HasOne("MakeenCo_Work.Domain.Models.User", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CreatedBy");
-                });
-
             modelBuilder.Entity("MakeenCo_Work.Domain.Models.Message", b =>
                 {
                     b.HasOne("MakeenCo_Work.Domain.Models.User", "Recipient")
-                        .WithMany()
+                        .WithMany("ReceivedMessages")
                         .HasForeignKey("RecipientId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("MakeenCo_Work.Domain.Models.User", "Sender")
-                        .WithMany()
+                        .WithMany("SentMessages")
                         .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("MakeenCo_Work.Domain.Models.User", null)
-                        .WithMany("ReceivedMessages")
-                        .HasForeignKey("UserId");
-
-                    b.HasOne("MakeenCo_Work.Domain.Models.User", null)
-                        .WithMany("SentMessages")
-                        .HasForeignKey("UserId1");
 
                     b.Navigation("Recipient");
 

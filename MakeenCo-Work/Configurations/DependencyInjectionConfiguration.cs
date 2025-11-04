@@ -11,6 +11,8 @@ namespace MakeenCo_Work.Configurations
         {
             service.AddScoped<IWaysOfCommunicationRepository, WaysOfCommunicationRepository>();
             service.AddScoped<IWaysOfCommunicationService, WaysOfCommunicationService>();
+            service.AddScoped<IFaqRepository,FaqRepository>();
+            service.AddScoped<IFaqService,FaqService>();
 
         }
     }
