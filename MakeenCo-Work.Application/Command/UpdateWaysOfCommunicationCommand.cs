@@ -9,7 +9,6 @@ namespace MakeenCo_Work.Application.Command
 {
     public class UpdateWaysOfCommunicationCommand:WaysOfCommunicationDto
     {
-        public Guid Id { get; set; }
 
     }
 }

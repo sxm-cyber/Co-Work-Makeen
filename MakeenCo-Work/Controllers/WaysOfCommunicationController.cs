@@ -12,28 +12,29 @@ namespace MakeenCo_Work.Controllers
         public WaysOfCommunicationController(IWaysOfCommunicationService waysOfCommunicationService)
         {
             _waysOfCommunicationService = waysOfCommunicationService;
-
         }
+
         [HttpPost]
         public async Task<IActionResult> CreateAsync(
             [FromBody] CreateWaysOfCommunicationCommand command)
-        { 
+        {
             await _waysOfCommunicationService.CreateWaysOfCommunicationAsync(command);
             return Ok();
         }
-            [HttpGet]
+
+        [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
-            var Resalt = await _waysOfCommunicationService.GetAllWaysOfCommunicationAsync();
-            return Ok(Resalt);
+            var resalt = await _waysOfCommunicationService.GetAllWaysOfCommunicationAsync();
+            return Ok(resalt);
         }
+
         [HttpPut]
         public async Task<IActionResult> UpdateAsync(
             [FromBody] UpdateWaysOfCommunicationCommand command)
         {
             await _waysOfCommunicationService.UpdateWaysOfCommunicationAsync(command);
             return Ok();
-
         }
     }
 }

@@ -23,7 +23,7 @@ namespace MakeenCo_Work.Application.Services
 
         public async Task CreateFaqAsync(CreateFaqCommand command)
         {
-            await _faqRepository.CreateAsync(command.Question,command.Answer,command.PublishInMainPage,command.PublishInFrequentlyAskedQuestions,command.IsActive);
+            await _faqRepository.CreateAsync( command.Question,command.Answer,command.PublishInMainPage,command.PublishInFrequentlyAskedQuestions,command.IsActive);
         }
 
         public async Task DeleteFaqAsync(Guid id)
@@ -36,6 +36,7 @@ namespace MakeenCo_Work.Application.Services
             List<FAQ> faqs = await _faqRepository.GetAllsync();
             List<FaqDto> result = faqs.Select(f => new FaqDto
             {
+                Id = f.Id,
                 Question=f.Question,
                 Answer=f.Answer,
                 PublishInMainPage=f.PublishInMainPage,

@@ -36,6 +36,7 @@ namespace MakeenCo_Work.Application.Services
             List<WaysOfCommunication> WaysOfCommunication=await _waysOfCommunicationRepository.GetAllAsync();
             List<WaysOfCommunicationDto> WaysOfCommunicationResalt= WaysOfCommunication.Select(w=>new WaysOfCommunicationDto
             {
+                Id=w.Id,
                 Address=w.Address,
                 PhoneNumber=w.PhoneNumber,
                 LandlineNumber=w.LandlineNumber,

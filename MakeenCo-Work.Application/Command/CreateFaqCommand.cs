@@ -7,7 +7,16 @@ using MakeenCo_Work.Application.DTOs;
 
 namespace MakeenCo_Work.Application.Command
 {
-    public class CreateFaqCommand:FaqDto
+    public class CreateFaqCommand
     {
+        public string Question { get; set; }
+
+        public string Answer { get; set; }
+
+        public bool IsActive { get; set; }
+
+        public bool PublishInMainPage { get; set; }
+
+        public bool PublishInFrequentlyAskedQuestions { get; set; }
     }
 }

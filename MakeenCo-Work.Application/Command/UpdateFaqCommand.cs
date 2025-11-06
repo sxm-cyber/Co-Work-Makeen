@@ -9,6 +9,5 @@ namespace MakeenCo_Work.Application.Command
 {
     public class UpdateFaqCommand:FaqDto
     {
-        public Guid Id { get; set; }
     }
 }
