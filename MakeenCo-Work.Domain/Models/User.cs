@@ -15,9 +15,15 @@ namespace MakeenCo_Work.Domain.Models
 
 		public string FullName => $"{FirstName} {LastName}";
 
+
+		[Required , MaxLength(10)]
+		public string NationalCode { get; private set; }
+
 		public string? ProfilePictureUrl { get; private set; }
 
 		public bool IsActive { get; private set; }
+
+		public bool IsMandatoryCoworking { get; private set; }
 
 		public DateTime CreatedAt { get; private set; }
 
@@ -35,12 +41,12 @@ namespace MakeenCo_Work.Domain.Models
 		private User() { }
 
 
-		public User(string firstName , string lastName , string email , string phoneNumber)
+		public User(string firstName , string lastName , string nationalCode , string phoneNumber)
 		{
 			Id = Guid.NewGuid();
 			FirstName = firstName;
 			LastName = lastName;
-			Email = email;
+			NationalCode = nationalCode;
 			PhoneNumber = phoneNumber;
 			IsActive = true;
 			CreatedAt = DateTime.UtcNow;
@@ -66,6 +72,12 @@ namespace MakeenCo_Work.Domain.Models
 		public void SetActive(bool isActive)
 		{
 			IsActive = isActive;
+			UpdatedAt = DateTime.UtcNow;
+		}
+
+		public void SetMandatoryCoworking(bool isMandatory)
+		{
+			IsMandatoryCoworking = isMandatory;
 			UpdatedAt = DateTime.UtcNow;
 		}
 

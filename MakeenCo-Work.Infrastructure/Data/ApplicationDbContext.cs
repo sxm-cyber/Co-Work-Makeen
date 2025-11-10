@@ -1,4 +1,5 @@
 ﻿using MakeenCo_Work.Domain.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -50,12 +51,17 @@ namespace MakeenCo_Work.Infrastructure.Data
             builder.Entity<Regulation>().ToTable("Regulations");
             builder.Entity<Reservation>().ToTable("Reservations");
             builder.Entity<Space>().ToTable("Spaces");
-            builder.Entity<Image>().ToTable("Image");
+            builder.Entity<Image>().ToTable("Images");
             builder.Entity<WhyMakeen>().ToTable("WhyMakeen");
             builder.Entity<MoreThanAcademy>().ToTable("MoreThanAcademy");
             builder.Entity<WaysOfCommunication>().ToTable("WaysOfCommunication");
             builder.Entity<MainBaner>().ToTable("MainBaner");
             builder.Entity<Message>().ToTable("Message");
+            builder.Entity<IdentityUserRole<Guid>>().ToTable("UserRoles");
+            builder.Entity<IdentityUserLogin<Guid>>().ToTable("UserLogins");
+            builder.Entity<IdentityUserClaim<Guid>>().ToTable("UserClaims");
+            builder.Entity<IdentityRoleClaim<Guid>>().ToTable("RoleClaims");
+            builder.Entity<IdentityUserToken<Guid>>().ToTable("UserTokens");
 
 
             builder.Entity<Message>()
@@ -70,6 +76,9 @@ namespace MakeenCo_Work.Infrastructure.Data
                 .HasForeignKey(m => m.RecipientId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Entity<User>()
+                .HasIndex(u => u.NationalCode)
+                .IsUnique();
         }
     }
 }

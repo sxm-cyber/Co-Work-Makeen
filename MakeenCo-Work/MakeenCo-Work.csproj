@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>MakeenCo_Work</RootNamespace>
+    <UserSecretsId>cc9b3597-dd62-46d1-866a-fdd8dc708e79</UserSecretsId>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
@@ -16,10 +17,15 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.7.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.20" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="7.3.2" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="Controllers\" />
+    <None Remove="Extentions\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MakeenCo-Work.Application\MakeenCo-Work.Application.csproj">
@@ -31,5 +37,8 @@
     <ProjectReference Include="..\MakeenCo-Work.Domain\MakeenCo-Work.Domain.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Extentions\" />
   </ItemGroup>
 </Project>

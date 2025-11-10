@@ -5,10 +5,31 @@
     <RootNamespace>MakeenCo_Work.Application</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <UserSecretsId>849a46d3-4619-456a-bea3-31998225cdd8</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MakeenCo-Work.Domain\MakeenCo-Work.Domain.csproj" />
     <ProjectReference Include="..\MakeenCo-Work.Infrastructure\MakeenCo-Work.Infrastructure.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Validators\" />
+    <None Remove="Command\User\" />
+    <None Remove="Command\Auth\" />
+    <None Remove="DTOs\Auth\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Validators\" />
+    <Folder Include="Command\User\" />
+    <Folder Include="Command\Auth\" />
+    <Folder Include="DTOs\Auth\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="5.0.0" />
+    <PackageReference Include="FluentValidation" Version="11.0.0" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.0.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.7.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
+    <PackageReference Include="CsvHelper" Version="30.0.0" />
   </ItemGroup>
 </Project>

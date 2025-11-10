@@ -9,9 +9,20 @@ namespace MakeenCo_Work.Configurations
     {
         public static void AddDependency(this IServiceCollection service)
         {
+            //Repositories
             service.AddScoped<IWaysOfCommunicationRepository, WaysOfCommunicationRepository>();
-            service.AddScoped<IWaysOfCommunicationService, WaysOfCommunicationService>();
+            service.AddScoped<IUserRepository, UserRepository>();
 
+
+
+
+            //Services
+            service.AddScoped<IWaysOfCommunicationService, WaysOfCommunicationService>();
+            service.AddScoped<IUserService, UserService>();
+            service.AddScoped<IAuthService, AuthService>();
+            service.AddScoped<IOtpService, OtpService>();
+            service.AddScoped<IFileStorageService, FileStorageService>();
+            service.AddScoped<IBulkUserService, BulkUserService>();
         }
     }
 }
