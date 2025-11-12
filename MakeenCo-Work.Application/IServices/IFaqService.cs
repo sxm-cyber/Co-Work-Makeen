@@ -11,6 +11,7 @@ namespace MakeenCo_Work.Application.IServices
     public interface IFaqService
     {
         Task<List<FaqDto>> GetAllFaqDtoAsync();
+        Task<FaqDto?> GetByIdAsync(Guid id);
 
         Task CreateFaqAsync(CreateFaqCommand command);
 

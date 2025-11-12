@@ -47,6 +47,22 @@ namespace MakeenCo_Work.Application.Services
             return result;
         }
 
+        public async Task<FaqDto?> GetByIdAsync(Guid id)
+        {
+            var faq = await _faqRepository.GetByIdAsync(id);
+            if (faq == null) return null;
+
+            return new FaqDto
+            {
+                Id = faq.Id,
+                Question = faq.Question,
+                Answer = faq.Answer,
+                PublishInMainPage = faq.PublishInMainPage,
+                PublishInFrequentlyAskedQuestions = faq.PublishInFrequentlyAskedQuestions,
+                IsActive = faq.IsActive
+            };
+        }
+
         public async Task UpdateFaqAsync(UpdateFaqCommand command)
         {
             await _faqRepository.UpdateAsync( command.Id,command.Question,command.Answer,command.PublishInMainPage,command.PublishInFrequentlyAskedQuestions,command.IsActive);

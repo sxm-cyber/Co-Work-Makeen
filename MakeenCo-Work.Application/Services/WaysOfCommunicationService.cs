@@ -48,6 +48,28 @@ namespace MakeenCo_Work.Application.Services
             return WaysOfCommunicationResalt;
         }
 
+        public async Task<WaysOfCommunicationDto?> GetByIdAsync(Guid id)
+        {
+            var weyseof = await _waysOfCommunicationRepository.GetByIdAsync(id);
+            if (weyseof==null)
+            {
+                return null;
+                
+            }
+            return new WaysOfCommunicationDto
+            {
+                Id = weyseof.Id,
+                Address = weyseof.Address,
+                PhoneNumber = weyseof.PhoneNumber,
+                LandlineNumber = weyseof.LandlineNumber,
+                BaleLink = weyseof.BaleLink,
+                InstagramLink = weyseof.InstagramLink,
+                LinkdinLink = weyseof.LinkdinLink,
+                MakeenWebsiteLink = weyseof.MakeenWebsiteLink
+
+            };
+        }
+
         public async Task UpdateWaysOfCommunicationAsync(UpdateWaysOfCommunicationCommand command)
         {
             await _waysOfCommunicationRepository.UpdateAsync(

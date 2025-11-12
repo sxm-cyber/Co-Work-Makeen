@@ -26,6 +26,15 @@ namespace MakeenCo_Work.Controllers
             var result = await _faqService.GetAllFaqDtoAsync();
             return Ok(result);
         }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetByIdAsync(Guid id)
+        {
+            var result = await _faqService.GetByIdAsync(id);
+            if (result == null)
+                return NotFound();
+
+            return Ok(result);
+        }
         [HttpPut]
         public async Task<IActionResult> UpdateAsync([FromBody]UpdateFaqCommand command) 
         {
