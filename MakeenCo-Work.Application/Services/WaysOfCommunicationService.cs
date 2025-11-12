@@ -36,6 +36,7 @@ namespace MakeenCo_Work.Application.Services
             List<WaysOfCommunication> WaysOfCommunication=await _waysOfCommunicationRepository.GetAllAsync();
             List<WaysOfCommunicationDto> WaysOfCommunicationResalt= WaysOfCommunication.Select(w=>new WaysOfCommunicationDto
             {
+                Id=w.Id,
                 Address=w.Address,
                 PhoneNumber=w.PhoneNumber,
                 LandlineNumber=w.LandlineNumber,
@@ -45,6 +46,28 @@ namespace MakeenCo_Work.Application.Services
                 MakeenWebsiteLink=w.MakeenWebsiteLink
             }).ToList();
             return WaysOfCommunicationResalt;
+        }
+
+        public async Task<WaysOfCommunicationDto?> GetByIdAsync(Guid id)
+        {
+            var weyseof = await _waysOfCommunicationRepository.GetByIdAsync(id);
+            if (weyseof==null)
+            {
+                return null;
+                
+            }
+            return new WaysOfCommunicationDto
+            {
+                Id = weyseof.Id,
+                Address = weyseof.Address,
+                PhoneNumber = weyseof.PhoneNumber,
+                LandlineNumber = weyseof.LandlineNumber,
+                BaleLink = weyseof.BaleLink,
+                InstagramLink = weyseof.InstagramLink,
+                LinkdinLink = weyseof.LinkdinLink,
+                MakeenWebsiteLink = weyseof.MakeenWebsiteLink
+
+            };
         }
 
         public async Task UpdateWaysOfCommunicationAsync(UpdateWaysOfCommunicationCommand command)

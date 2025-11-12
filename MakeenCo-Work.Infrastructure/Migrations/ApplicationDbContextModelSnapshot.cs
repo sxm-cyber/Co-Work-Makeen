@@ -189,12 +189,6 @@ namespace MakeenCo_Work.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("CreatedById")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -209,12 +203,7 @@ namespace MakeenCo_Work.Infrastructure.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
 
                     b.ToTable("Faqs", (string)null);
                 });
@@ -801,17 +790,6 @@ namespace MakeenCo_Work.Infrastructure.Migrations
                 });
 
             modelBuilder.Entity("MakeenCo_Work.Domain.Models.Content", b =>
-                {
-                    b.HasOne("MakeenCo_Work.Domain.Models.User", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CreatedBy");
-                });
-
-            modelBuilder.Entity("MakeenCo_Work.Domain.Models.FAQ", b =>
                 {
                     b.HasOne("MakeenCo_Work.Domain.Models.User", "CreatedBy")
                         .WithMany()

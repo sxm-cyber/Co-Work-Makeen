@@ -14,50 +14,39 @@ namespace MakeenCo_Work.Domain.Models
 		[Required]
 		public string Answer { get; private set; }
 
-		public bool IsActive { get; private set; }
+		public bool IsActive { get;private  set; }
 
         public bool PublishInMainPage { get;private set; }
 
         public bool PublishInFrequentlyAskedQuestions { get;private set; }
 
-        public DateTime CreatedAt { get; private set; }
-
-		public DateTime? UpdatedAt { get; private set; }
-
-
-		public Guid CreatedById { get; private set; }
-		public User CreatedBy { get; private set; } = null;
+      
+		//public User CreatedBy { get; private set; } = null;
 		
 
 		private FAQ() { }
 
 
-		public FAQ(string question , string answer , Guid createdById)
+		public FAQ(string question,string answer,bool publishInFrequentlyAskedQuestions,bool publishInMainPage,bool isActive)
 		{
 			Id = Guid.NewGuid();
 			Question = question;
 			Answer = answer;
-			CreatedById = createdById;
-			PublishInFrequentlyAskedQuestions = false;
-			PublishInMainPage = false;
-			IsActive = true;
-			CreatedAt = DateTime.UtcNow;
+			PublishInFrequentlyAskedQuestions = publishInFrequentlyAskedQuestions;
+			PublishInMainPage = publishInMainPage;
+			IsActive = isActive;
 		}
 
-		public void Update(string question , string answer )
+		public void Update(string question , string answer, bool publishInMainPage, bool publishInFrequentlyAskedQuestions, bool isActive)
 		{
 			Question = question;
 			Answer = answer;
 			PublishInMainPage = false;
 			PublishInFrequentlyAskedQuestions = false;
-			UpdatedAt = DateTime.UtcNow;
+			
 		}
 
-		public void SetActive(bool isActive)
-		{
-			IsActive = isActive;
-			UpdatedAt = DateTime.UtcNow;
-		}
+		
 	}
 }
 

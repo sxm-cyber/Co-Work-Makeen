@@ -1,5 +1,6 @@
 ﻿using MakeenCo_Work.Application.Command;
 using MakeenCo_Work.Application.IServices;
+using MakeenCo_Work.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MakeenCo_Work.Controllers
@@ -12,20 +13,30 @@ namespace MakeenCo_Work.Controllers
         public WaysOfCommunicationController(IWaysOfCommunicationService waysOfCommunicationService)
         {
             _waysOfCommunicationService = waysOfCommunicationService;
-
         }
+
         [HttpPost]
         public async Task<IActionResult> CreateAsync(
             [FromBody] CreateWaysOfCommunicationCommand command)
-        { 
+        {
             await _waysOfCommunicationService.CreateWaysOfCommunicationAsync(command);
             return Ok();
         }
-            [HttpGet]
+
+        [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
-            var Resalt = await _waysOfCommunicationService.GetAllWaysOfCommunicationAsync();
-            return Ok(Resalt);
+            var resalt = await _waysOfCommunicationService.GetAllWaysOfCommunicationAsync();
+            return Ok(resalt);
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetByIdAsync(Guid id)
+        {
+            var result = await _waysOfCommunicationService.GetByIdAsync(id);
+            if (result == null)
+                return NotFound();
+
+            return Ok(result);
         }
         [HttpPut]
         public async Task<IActionResult> UpdateAsync(
@@ -33,7 +44,6 @@ namespace MakeenCo_Work.Controllers
         {
             await _waysOfCommunicationService.UpdateWaysOfCommunicationAsync(command);
             return Ok();
-
         }
     }
 }

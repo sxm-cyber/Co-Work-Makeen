@@ -12,6 +12,7 @@ namespace MakeenCo_Work.Application.IServices
     public interface IWaysOfCommunicationService
     {
         Task<List<WaysOfCommunicationDto>> GetAllWaysOfCommunicationAsync();
+        Task<WaysOfCommunicationDto?> GetByIdAsync(Guid id);
         Task CreateWaysOfCommunicationAsync(CreateWaysOfCommunicationCommand command);
         Task UpdateWaysOfCommunicationAsync(UpdateWaysOfCommunicationCommand command);
 

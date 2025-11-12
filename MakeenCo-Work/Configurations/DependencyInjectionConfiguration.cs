@@ -12,6 +12,8 @@ namespace MakeenCo_Work.Configurations
             //Repositories
             service.AddScoped<IWaysOfCommunicationRepository, WaysOfCommunicationRepository>();
             service.AddScoped<IUserRepository, UserRepository>();
+            service.AddScoped<IFaqRepository,FaqRepository>();
+            
 
 
 
@@ -23,6 +25,7 @@ namespace MakeenCo_Work.Configurations
             service.AddScoped<IOtpService, OtpService>();
             service.AddScoped<IFileStorageService, FileStorageService>();
             service.AddScoped<IBulkUserService, BulkUserService>();
+            service.AddScoped<IFaqService, FaqService>();
         }
     }
 }

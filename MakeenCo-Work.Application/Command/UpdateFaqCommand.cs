@@ -7,8 +7,7 @@ using MakeenCo_Work.Application.DTOs;
 
 namespace MakeenCo_Work.Application.Command
 {
-    public class UpdateWaysOfCommunicationCommand:WaysOfCommunicationDto
+    public class UpdateFaqCommand:FaqDto
     {
-
     }
 }

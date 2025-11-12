@@ -40,6 +40,8 @@ builder.Services.AddIdentity<User, Role>(options =>
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
 
+builder.Services.IAdditiveIdentity();
+
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
