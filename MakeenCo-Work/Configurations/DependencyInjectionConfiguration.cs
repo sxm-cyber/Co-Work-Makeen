@@ -13,13 +13,8 @@ namespace MakeenCo_Work.Configurations
             service.AddScoped<IWaysOfCommunicationRepository, WaysOfCommunicationRepository>();
             service.AddScoped<IUserRepository, UserRepository>();
             service.AddScoped<IFaqRepository,FaqRepository>();
-<<<<<<< HEAD
-            
-=======
-            service.AddScoped<IFaqService,FaqService>();
             service.AddScoped<IRegulationRepository, RegulationRepository>();
-            service.AddScoped<IRegulationService, RegulationService>();
->>>>>>> Add-Regulation-configuration
+            
 
 
 
@@ -32,6 +27,7 @@ namespace MakeenCo_Work.Configurations
             service.AddScoped<IFileStorageService, FileStorageService>();
             service.AddScoped<IBulkUserService, BulkUserService>();
             service.AddScoped<IFaqService, FaqService>();
+            service.AddScoped<IRegulationService, RegulationService>();
         }
     }
 }
