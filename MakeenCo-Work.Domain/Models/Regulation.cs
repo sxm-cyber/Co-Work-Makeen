@@ -15,41 +15,29 @@ namespace MakeenCo_Work.Domain.Models
 
 		public bool IsActive { get; private set; }
 
-		public DateTime CreatedAt { get; private set; }
-
-		public DateTime? UpdatedAt { get; private set; }
-
-		public Guid CreatedById { get; private set; }
-		public User CreatedBy { get; private set; } = null;
-
-
-
 		private Regulation() { }
 
 
-		public Regulation(string title , string content , Guid createdById  )
+		public Regulation(string title , string content , bool isActive )
 		{
 			Id = Guid.NewGuid();
 			Title = title;
 			Content = content;
-			CreatedById = createdById;
+			 
 		
-			IsActive = true;
-			CreatedAt = DateTime.UtcNow;
+			IsActive = isActive;
+			
 		}
 
-		public void Update(string title , string content)
+		public void Update(string title , string content,bool isActive)
 		{
 			Title = title;
 			Content = content;
-			UpdatedAt = DateTime.UtcNow;
+			IsActive = isActive;
+			
 		}
 
-		public void SetActive(bool isActive)
-		{
-			IsActive = isActive;
-			UpdatedAt = DateTime.UtcNow;
-		}
+		
 	}
 }
 
