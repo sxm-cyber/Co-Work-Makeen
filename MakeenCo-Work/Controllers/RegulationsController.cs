@@ -17,16 +17,25 @@ namespace MakeenCo_Work.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync( [FromBody] CreateRegulationCommand command)
+        public async Task<IActionResult> CreateAsync([FromBody] CreateRegulationCommand command)
         {
             await _regulationService.CreateRegulationAsync(command);
             return Ok();
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllAsync() 
+        public async Task<IActionResult> GetAllAsync()
         {
             var regul = await _regulationService.GetAllRegulationDtoAsync();
             return Ok(regul);
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetByIdAsync(Guid id)
+        {
+            var result = await _regulationService.GetById(id);
+            if (result == null)
+                return NotFound();
+
+            return Ok(result);
         }
         [HttpPut]
         public async Task<IActionResult> UpdateRegulationAsync([FromBody] UpdateRegulationCommand command)

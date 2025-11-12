@@ -45,6 +45,21 @@ namespace MakeenCo_Work.Application.Services
             return result;
         }
 
+        public async Task<RegulationDto?> GetById(Guid Id)
+        {
+            var regul = await _regulationRepository.GetByIdAsync(Id);
+            if (regul == null) return null;
+            return new RegulationDto
+            {
+                Id = regul.Id,
+                Title = regul.Title,
+                Content = regul.Content,
+                IsActive = regul.IsActive
+
+
+            };
+        }
+
         public async Task UpdateRegulationAsync(UpdateRegulationCommand command)
         {
             await _regulationRepository.UpdateAsync(command.Id,command.Title,command.Content,command.IsActive);

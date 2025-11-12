@@ -11,6 +11,7 @@ namespace MakeenCo_Work.Application.IServices
     public interface IRegulationService
     {
         Task<List<RegulationDto>> GetAllRegulationDtoAsync();
+        Task<RegulationDto?> GetById(Guid Id);
 
         Task CreateRegulationAsync(CreateRegulationCommand command);
 
