@@ -231,6 +231,9 @@ namespace MakeenCo_Work.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("AttachedFilesJson")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -252,6 +255,9 @@ namespace MakeenCo_Work.Infrastructure.Migrations
 
                     b.Property<Guid>("SenderId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<string>("Subject")
                         .IsRequired()

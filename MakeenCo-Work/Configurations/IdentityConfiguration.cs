@@ -6,9 +6,11 @@ namespace MakeenCo_Work.Configurations
 {
     public static class IdentityConfiguration
     {
-        public static void IAdditiveIdentity(this IServiceCollection services)
+        public static IServiceCollection AddIdentityConfiguration(this IServiceCollection services)
         {
-            services.AddIdentity<User, Role>(options =>
+            // Use AddIdentityCore instead of AddIdentity to avoid Cookie Authentication
+            // We use JWT for authentication, not Cookie
+            services.AddIdentityCore<User>(options =>
             {
                 options.Password.RequireDigit = true;
                 options.Password.RequireLowercase = true;
@@ -16,9 +18,11 @@ namespace MakeenCo_Work.Configurations
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequiredLength = 6;
             })
+            .AddRoles<Role>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
 
+            return services;
         }
     }
 }
