@@ -81,8 +81,12 @@ namespace MakeenCo_Work.Controllers
 		[HttpPost("LogOut")] //[Authorize]
 		public async Task<IActionResult> LogoutAsync()
 		{
-			var userId = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value);
-			await _authService.LogoutAsync(userId);
+			var idValue = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+			if (string.IsNullOrEmpty(idValue))
+				return Unauthorized();
+
+			var userId = Guid.Parse(idValue);
 
 			return Ok(new { Message = "Logout Successfully" });
 		}

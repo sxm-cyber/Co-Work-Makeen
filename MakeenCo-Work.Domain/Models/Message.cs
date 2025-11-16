@@ -26,6 +26,10 @@ namespace MakeenCo_Work.Domain.Models
 
 		public DateTime? UpdateAt { get; private set; }
 
+		public MessageStatus Status { get; private set; }
+
+		public string? AttachedFilesJson { get; private set; }
+
 
 		public Guid SenderId { get; private set; }
 		public User Sender { get; private set; } = null!;
@@ -49,6 +53,7 @@ namespace MakeenCo_Work.Domain.Models
 			Type = type;
 			Priority = priority;
 			IsRead = false;
+			Status = MessageStatus.Pending;
 			CreatedAt = DateTime.UtcNow;
 		}
 
@@ -63,6 +68,38 @@ namespace MakeenCo_Work.Domain.Models
 			Subject = subject;
 			Content = content;
 			UpdateAt = DateTime.UtcNow;
+		}
+
+		public void SetStatus(MessageStatus status)
+		{
+			Status = status;
+			UpdateAt = DateTime.UtcNow;
+		}
+
+		public void Approve()
+		{
+			Status = MessageStatus.Approved;
+			UpdateAt = DateTime.UtcNow;
+		}
+
+		public void Reject()
+		{
+			Status = MessageStatus.Rejected;
+			UpdateAt = DateTime.UtcNow;
+		}
+
+		public void AttachFiles(List<string> filePaths)
+		{
+			AttachedFilesJson = System.Text.Json.JsonSerializer.Serialize(filePaths);
+			UpdateAt = DateTime.UtcNow;
+		}
+
+		public List<string> GetAttachedFiles()
+		{
+			if (string.IsNullOrEmpty(AttachedFilesJson))
+				return new List<string>();
+
+			return System.Text.Json.JsonSerializer.Deserialize<List<string>>(AttachedFilesJson) ?? new List<string>();
 		}
 	}
 }
