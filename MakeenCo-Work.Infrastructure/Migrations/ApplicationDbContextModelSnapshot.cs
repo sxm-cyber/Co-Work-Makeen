@@ -451,6 +451,32 @@ namespace MakeenCo_Work.Infrastructure.Migrations
                     b.ToTable("Spaces", (string)null);
                 });
 
+            modelBuilder.Entity("MakeenCo_Work.Domain.Models.TieredDiscount", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("FreeDays")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("PeriodDays")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TieredDiscounts", (string)null);
+                });
+
             modelBuilder.Entity("MakeenCo_Work.Domain.Models.User", b =>
                 {
                     b.Property<Guid>("Id")

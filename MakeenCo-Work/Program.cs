@@ -10,6 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 //Add Application Services/Repositories
 builder.Services.AddDependency();
 
+//Add FluentValidation
+builder.Services.AddApplicationFluentValidations();
 
 //Add Jwt Authentication
 builder.Services.AddJwtAuthentication(builder.Configuration);

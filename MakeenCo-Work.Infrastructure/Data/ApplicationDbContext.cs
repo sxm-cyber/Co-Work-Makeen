@@ -35,6 +35,8 @@ namespace MakeenCo_Work.Infrastructure.Data
 
         public DbSet<Message>Messages { get; set; }
 
+        public DbSet<TieredDiscount> TieredDiscounts { get; set; }
+
 
 
 
@@ -62,6 +64,7 @@ namespace MakeenCo_Work.Infrastructure.Data
             builder.Entity<IdentityUserClaim<Guid>>().ToTable("UserClaims");
             builder.Entity<IdentityRoleClaim<Guid>>().ToTable("RoleClaims");
             builder.Entity<IdentityUserToken<Guid>>().ToTable("UserTokens");
+            builder.Entity<TieredDiscount>().ToTable("TieredDiscounts");
 
 
             builder.Entity<Message>()
