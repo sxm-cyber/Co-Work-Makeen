@@ -3,10 +3,8 @@ using MakeenCo_Work.Domain.Enums;
 
 namespace MakeenCo_Work.Domain.Models
 {
-	public class Content
+	public class Content : BaseModel
 	{
-		public Guid Id { get; private set; }
-
 		[Required , MaxLength(200)]
 		public string Title { get; private set; }
 
@@ -23,10 +21,6 @@ namespace MakeenCo_Work.Domain.Models
 
 		public bool IsPublished { get; private set; }
 
-		public DateTime CreatedAt { get; private set; }
-
-		public DateTime? UpdatedAt { get; private set; }
-
 		public DateTime? PublishedAt { get; private set; }
 
 
@@ -40,7 +34,6 @@ namespace MakeenCo_Work.Domain.Models
 
 		public Content(string title , ContentType type , Guid createdById , string? description = null , string? contentText = null , string? imageUrl = null)
 		{
-			Id = Guid.NewGuid();
 			Title = title;
 			Type = type;
             CreatedById = createdById;
@@ -49,7 +42,6 @@ namespace MakeenCo_Work.Domain.Models
             ImageUrl = imageUrl;
             IsActive = true;
             IsPublished = false;
-            CreatedAt = DateTime.UtcNow;
         }
 
 		public void Update(string title , string? description , string? contentText , ContentType type)
@@ -58,33 +50,33 @@ namespace MakeenCo_Work.Domain.Models
 			Description = description;
 			ContentText = contentText;
 			Type = type;
-			UpdatedAt = DateTime.UtcNow;
+			UpdateTimestamp();
 		}
 
 		public void UpdateImage(string imageUrl)
 		{
 			ImageUrl = imageUrl;
-			UpdatedAt = DateTime.UtcNow;
-		}
+            UpdateTimestamp();
+        }
 
 		public void Publish()
 		{
 			IsPublished = true;
 			PublishedAt = DateTime.UtcNow;
-			UpdatedAt = DateTime.UtcNow;
-		}
+            UpdateTimestamp();
+        }
 
 		public void Unpublish()
 		{
 			IsPublished = false;
-			UpdatedAt = DateTime.UtcNow;
-		}
+            UpdateTimestamp();
+        }
 
 		public void SetActive(bool isActive)
 		{
 			IsActive = isActive;
-			UpdatedAt = DateTime.UtcNow;
-		}
+            UpdateTimestamp();
+        }
 	}
 }
 

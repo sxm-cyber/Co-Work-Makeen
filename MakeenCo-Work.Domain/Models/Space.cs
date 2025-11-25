@@ -2,9 +2,8 @@
 
 namespace MakeenCo_Work.Domain.Models
 {
-	public class Space
+	public class Space : BaseModel
 	{
-		public Guid Id { get; private set; }
 
 		[Required, MaxLength(100)]
 		public string Name { get; private set; }
@@ -26,10 +25,6 @@ namespace MakeenCo_Work.Domain.Models
 
 		public string? Location { get; private set; }
 
-		public DateTime? UpdatedAt { get; private set; }
-
-		public DateTime CreatedAt { get; private set; }
-
 		public ICollection<Reservation> Reservations { get; private set; } = new List<Reservation>();
 
 
@@ -39,7 +34,6 @@ namespace MakeenCo_Work.Domain.Models
 		public Space(string name , int capacity , decimal hourlyRate, decimal dailyRate, decimal monthlyRate
 			,string? description = null , string?  location = null)
 		{
-			Id = Guid.NewGuid();
 			Name = name;
 			Capacity = capacity;
 			HourlyRate = hourlyRate;
@@ -48,7 +42,6 @@ namespace MakeenCo_Work.Domain.Models
 			Description = description;
 			Location = location;
 			IsActive = true;
-			CreatedAt = DateTime.UtcNow;
 			Reservations = new List<Reservation>();
 		}
 
@@ -62,20 +55,20 @@ namespace MakeenCo_Work.Domain.Models
 			DailyRate = dailyRate;
 			MonthlyRate = monthlyRate;
 			Location = location;
-			UpdatedAt = DateTime.UtcNow;
+			UpdateTimestamp();
 		}
 
 		public void UpdateImage(string imageUrl)
 		{
 			ImageUrl = imageUrl;
-			UpdatedAt = DateTime.UtcNow;
-		}
+            UpdateTimestamp();
+        }
 
 		public void SetActive(bool isActive)
 		{
 			IsActive = isActive;
-			UpdatedAt = DateTime.UtcNow;
-		}
+            UpdateTimestamp();
+        }
 	}
 }
 

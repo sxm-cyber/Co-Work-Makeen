@@ -2,10 +2,8 @@
 
 namespace MakeenCo_Work.Domain.Models
 {
-	public class TieredDiscount
+	public class TieredDiscount : BaseModel
 	{
-		public Guid Id { get; private set; }
-
 		[Required]
 		public int PeriodDays { get; private set; }
 
@@ -14,34 +12,27 @@ namespace MakeenCo_Work.Domain.Models
 
 		public bool IsActive { get; private set; }
 
-		public DateTime CreatedAt { get; private set; }
-
-		public DateTime UpdatedAt { get; private set; }
-
 
 		private TieredDiscount() { }
 
 		public TieredDiscount(int periodDays , int freeDays)
 		{
-			Id = Guid.NewGuid();
 			PeriodDays = periodDays;
 			FreeDays = freeDays;
 			IsActive = true;
-			UpdatedAt = DateTime.UtcNow;
-			CreatedAt = DateTime.UtcNow;
 		}
 
 		public void Update(int periodDays , int freeDays)
 		{
 			PeriodDays = periodDays;
 			FreeDays = freeDays;
-			UpdatedAt = DateTime.UtcNow;
+			UpdateTimestamp();
 		}
 
 		public void SetActive(bool isActive)
 		{
 			IsActive = isActive;
-			UpdatedAt = DateTime.UtcNow;
+			UpdateTimestamp();
 		}
 
 		public int GetPaidDays()

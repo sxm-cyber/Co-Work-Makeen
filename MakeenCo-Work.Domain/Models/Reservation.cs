@@ -3,10 +3,8 @@ using MakeenCo_Work.Domain.Enums;
 
 namespace MakeenCo_Work.Domain.Models
 {
-	public class Reservation
+	public class Reservation : BaseModel
 	{
-		public Guid Id { get; private set; }
-
 		[Required , MaxLength(50)]
 		public string ReservationNumber { get; private set; }
 
@@ -23,10 +21,6 @@ namespace MakeenCo_Work.Domain.Models
 		public decimal TotalAmount { get; private set; }
 
 		public string? Notes { get; private set; }
-
-		public DateTime CreatedAt { get; private set; }
-
-		public DateTime? UpdatedAt { get; private set; }
 
 		public DateTime? CancelledAt { get; private set; }
 
@@ -51,7 +45,6 @@ namespace MakeenCo_Work.Domain.Models
 			DateTime startDate , DateTime endDate , DateTime startTime , DateTime endTime ,
 			decimal totalAmount , string? notes = null , Guid? discountCodeId = null)
 		{
-			Id = Guid.NewGuid();
 			ReservationNumber = reservationNumber;
 			UserId = userId;
 			SpaceId = spaceId;
@@ -63,14 +56,13 @@ namespace MakeenCo_Work.Domain.Models
 			Notes = notes;
 			DiscountCodeId = discountCodeId;
 			Status = ReservationStatus.Pending;
-			CreatedAt = DateTime.UtcNow;
 		}
 
 
 		public void Confirm()
 		{
 			Status = ReservationStatus.Confirmed;
-			UpdatedAt = DateTime.UtcNow;
+			UpdateTimestamp();
 		}
 
 		public void Cancel(string reason)
@@ -78,13 +70,13 @@ namespace MakeenCo_Work.Domain.Models
 			Status = ReservationStatus.Cancelled;
 			CancelledAt = DateTime.UtcNow;
 			CancellationReason = reason;
-			UpdatedAt = DateTime.UtcNow;
+			UpdateTimestamp();
 		}
 
 		public void Complete()
 		{
 			Status = ReservationStatus.Completed;
-			UpdatedAt = DateTime.UtcNow;
+			UpdateTimestamp();
 		}
 
 		public void Update(DateTime startDate, DateTime endDate, DateTime startTime, DateTime endTime, decimal totalAmount, string? notes = null)
@@ -95,7 +87,7 @@ namespace MakeenCo_Work.Domain.Models
 			EndTime = endTime;
 			TotalAmount = totalAmount;
 			Notes = notes;
-			UpdatedAt = DateTime.UtcNow;
+			UpdateTimestamp();
 		}
 	}
 }

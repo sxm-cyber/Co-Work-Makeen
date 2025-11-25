@@ -1,9 +1,7 @@
 ﻿namespace MakeenCo_Work.Domain.Models
 {
-    public class WaysOfCommunication
+    public class WaysOfCommunication : BaseModel
     {
-        public Guid Id { get; private set; }
-
         public string Address { get; private set; }
 
         public string PhoneNumber { get; private set; }
@@ -32,7 +30,6 @@
             InstagramLink = instagramLink;
             LinkdinLink = linkdinLink;
             MakeenWebsiteLink = makeenWebsiteLink;
-            Id = Guid.NewGuid();
         }
 
 
@@ -46,6 +43,7 @@
             InstagramLink = instagramLink;
             LinkdinLink = linkdinLink;
             MakeenWebsiteLink = makeenWebsiteLink;
+            UpdateTimestamp();
         }
     }
 }

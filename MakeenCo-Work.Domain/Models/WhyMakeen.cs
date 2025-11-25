@@ -2,8 +2,6 @@
 {
     public class WhyMakeen : Image
     {
-        public Guid Id { get; private set; }
-
         public bool NetworkOption { get; private set; } = false;
 
         public bool CafeOption { get; private set; } = false;
@@ -30,9 +28,8 @@
             
         
         public WhyMakeen(bool networkOption , bool cafeOption, bool reasonablePriceOption , bool lockerOption ,
-            bool printerOption , bool easyAccessOption , bool fridgeOption, bool gameOption, bool heaterOption )
+            bool printerOption , bool easyAccessOption , bool fridgeOption, bool gameOption, bool heaterOption)
         {
-            Id = Guid.NewGuid();
             NetworkOption = networkOption;
             CafeOption = cafeOption;
             ReasonablePriceOption = reasonablePriceOption;
@@ -42,7 +39,22 @@
             FridgeOption = fridgeOption;
             GameOption = gameOption;
             HeaterOption = heaterOption;
-            UpdateAt = DateTime.Now;
         }
+
+
+        //public void Update(bool networkOption , bool cafeOption , bool reasonablePriceOption, bool lockerOption,
+        //    bool printerOption, bool easyAccessOption, bool fridgeOption, bool gameOption, bool heaterOption)
+        //{
+        //    NetworkOption = networkOption;
+        //    CafeOption = cafeOption;
+        //    ReasonablePriceOption = reasonablePriceOption;
+        //    LockerOption = lockerOption;
+        //    PrinterOption = printerOption;
+        //    EasyAccessOption = easyAccessOption;
+        //    FridgeOption = fridgeOption;
+        //    GameOption = gameOption;
+        //    HeaterOption = heaterOption;
+        //    UpdateTimestamp();
+        //}
     }
 }

@@ -2,11 +2,8 @@
 
 namespace MakeenCo_Work.Domain.Models
 {
-	public class Regulation
+	public class Regulation : BaseModel
 	{
-
-		public Guid Id { get; private set; }
-
 		[Required , MaxLength(200)]
 		public string Title { get; private set; }
 
@@ -20,13 +17,9 @@ namespace MakeenCo_Work.Domain.Models
 
 		public Regulation(string title , string content , bool isActive )
 		{
-			Id = Guid.NewGuid();
 			Title = title;
 			Content = content;
-			 
-		
 			IsActive = isActive;
-			
 		}
 
 		public void Update(string title , string content,bool isActive)
@@ -34,10 +27,8 @@ namespace MakeenCo_Work.Domain.Models
 			Title = title;
 			Content = content;
 			IsActive = isActive;
-			
+			UpdateTimestamp();
 		}
-
-		
 	}
 }
 

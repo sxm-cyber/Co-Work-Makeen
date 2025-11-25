@@ -1,19 +1,16 @@
 ﻿namespace MakeenCo_Work.Domain.Models
 {
-    public class Image
+    public class Image : BaseModel
     {
-        public Guid Id { get; private set; }
-
         public string  ImageUrl { get; private set; }
 
 
         public Image() { }
-        
+
 
         public Image(string imageUrl)
         {
             ImageUrl = imageUrl;
-            Id = Guid.NewGuid();
         }
     }
 }

@@ -3,10 +3,8 @@ using MakeenCo_Work.Domain.Enums;
 
 namespace MakeenCo_Work.Domain.Models
 {
-	public class DiscountCode
+	public class DiscountCode : BaseModel
 	{
-		public Guid Id { get; private set; }
-
 		[Required , MaxLength(50)]
 		public string Code { get; private set; }
 
@@ -31,10 +29,6 @@ namespace MakeenCo_Work.Domain.Models
 
 		public bool IsActive { get; private set; }
 
-		public DateTime CreatedAt { get; private set; }
-
-		public DateTime UpdatedAt { get; private set; }
-
 		public ICollection<Reservation> Reservations { get; private set; } = new List<Reservation>();
 
 		private DiscountCode() { }
@@ -42,7 +36,6 @@ namespace MakeenCo_Work.Domain.Models
 
 		public DiscountCode(string code , DiscountType type , decimal value , DateTime validFrom , DateTime validTo , string? description = null)
 		{
-			Id = Guid.NewGuid();
 			Code = code;
 			Type = type;
 			Value = value;
@@ -51,8 +44,6 @@ namespace MakeenCo_Work.Domain.Models
 			Description = description;
 			IsActive = true;
 			UsedCount = 0;
-			CreatedAt = DateTime.UtcNow;
-			UpdatedAt = DateTime.UtcNow;
 			Reservations = new List<Reservation>();
 		}
 
@@ -64,37 +55,37 @@ namespace MakeenCo_Work.Domain.Models
             ValidFrom = validFrom;
             ValidTo = validTo;
             Description = description;
-			UpdatedAt = DateTime.UtcNow;
+			UpdateTimestamp();
         }
 
 		public void SetUsageLimit(int? usageLimit)
 		{
 			UsageLimit = usageLimit;
-			UpdatedAt = DateTime.UtcNow;
+			UpdateTimestamp();
 		}
 
 		public void SetMinimumAmount(decimal? minimumAmount)
 		{
 			MinimumAmount = minimumAmount;
-			UpdatedAt = DateTime.UtcNow;
+			UpdateTimestamp();
 		}
 
 		public void SetMaximumDiscount(decimal? maximumDiscount)
 		{
 			MaximumDiscount = maximumDiscount;
-			UpdatedAt = DateTime.UtcNow;
+			UpdateTimestamp();
 		}
 
 		public void SetActive(bool isActive)
 		{
 			IsActive = isActive;
-			UpdatedAt = DateTime.UtcNow;
+			UpdateTimestamp();
 		}
 
 		public void IncrementUsage()
 		{
 			UsedCount++;
-			UpdatedAt = DateTime.UtcNow;
+			UpdateTimestamp();
 		}
 
 		public bool IsValid()
