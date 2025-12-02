@@ -1,7 +1,10 @@
-﻿using MakeenCo_Work.Application.IServices;
+﻿using MakeenCo_Work.Application.Interfaces;
+using MakeenCo_Work.Application.IServices;
 using MakeenCo_Work.Application.Services;
 using MakeenCo_Work.Domain.IRepository;
+using MakeenCo_Work.Infrastructure.Repositories;
 using MakeenCo_Work.Infrastructure.Repository;
+using MakeenCo_Work.Infrastructure.UnitOfWork;
 
 namespace MakeenCo_Work.Configurations
 {
