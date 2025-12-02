@@ -27,7 +27,6 @@ namespace MakeenCo_Work.Configurations
 					IssuerSigningKey = new SymmetricSecurityKey(
 						Encoding.UTF8.GetBytes(configuration["Jwt:Key"]))
 				};
-
 			});
 
 			return services;

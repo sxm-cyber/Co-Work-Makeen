@@ -1,8 +1,6 @@
 ﻿using MakeenCo_Work.Configurations;
-using MakeenCo_Work.Domain.Models;
 using MakeenCo_Work.Extentions;
 using MakeenCo_Work.Infrastructure.Data;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -12,6 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 //Add Application Services/Repositories
 builder.Services.AddDependency();
 
+//Add FluentValidation
+builder.Services.AddApplicationFluentValidations();
 
 //Add Jwt Authentication
 builder.Services.AddJwtAuthentication(builder.Configuration);
@@ -29,18 +29,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 //Identity
-builder.Services.AddIdentity<User, Role>(options =>
-{
-    options.Password.RequireDigit = true;
-    options.Password.RequireLowercase = true;
-    options.Password.RequireUppercase = false;
-    options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequiredLength = 6;
-})
-.AddEntityFrameworkStores<ApplicationDbContext>()
-.AddDefaultTokenProviders();
-
-builder.Services.IAdditiveIdentity();
+builder.Services.AddIdentityConfiguration();
 
 
 builder.Services.AddControllers();

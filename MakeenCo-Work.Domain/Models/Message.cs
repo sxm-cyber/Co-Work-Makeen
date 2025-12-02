@@ -3,11 +3,8 @@ using MakeenCo_Work.Domain.Enums;
 
 namespace MakeenCo_Work.Domain.Models
 {
-	public class Message
+	public class Message : BaseModel
 	{
-		public Guid Id { get; private set; }
-
-
 		[Required , MaxLength(500)]
 		public string Subject { get; private set; }
 
@@ -22,9 +19,9 @@ namespace MakeenCo_Work.Domain.Models
 
 		public DateTime? ReadAt { get; private set; }
 
-		public DateTime CreatedAt { get; private set; }
+		public MessageStatus Status { get; private set; }
 
-		public DateTime? UpdateAt { get; private set; }
+		public string? AttachedFilesJson { get; private set; }
 
 
 		public Guid SenderId { get; private set; }
@@ -41,7 +38,6 @@ namespace MakeenCo_Work.Domain.Models
 		public Message(string subject , string content , Guid senderId , Guid recipientId ,
 			MessageType type = MessageType.General , MessagePriority priority = MessagePriority.Normal)
 		{
-			Id = Guid.NewGuid();
 			Subject = subject;
 			Content = content;
 			SenderId = senderId;
@@ -49,7 +45,7 @@ namespace MakeenCo_Work.Domain.Models
 			Type = type;
 			Priority = priority;
 			IsRead = false;
-			CreatedAt = DateTime.UtcNow;
+			Status = MessageStatus.Pending;
 		}
 
 		public void MarkAsRead()
@@ -62,7 +58,39 @@ namespace MakeenCo_Work.Domain.Models
 		{
 			Subject = subject;
 			Content = content;
-			UpdateAt = DateTime.UtcNow;
+			UpdateTimestamp();
+		}
+
+		public void SetStatus(MessageStatus status)
+		{
+			Status = status;
+			UpdateTimestamp();
+		}
+
+		public void Approve()
+		{
+			Status = MessageStatus.Approved;
+			UpdateTimestamp();
+		}
+
+		public void Reject()
+		{
+			Status = MessageStatus.Rejected;
+            UpdateTimestamp();
+        }
+
+		public void AttachFiles(List<string> filePaths)
+		{
+			AttachedFilesJson = System.Text.Json.JsonSerializer.Serialize(filePaths);
+            UpdateTimestamp();
+        }
+
+		public List<string> GetAttachedFiles()
+		{
+			if (string.IsNullOrEmpty(AttachedFilesJson))
+				return new List<string>();
+
+			return System.Text.Json.JsonSerializer.Deserialize<List<string>>(AttachedFilesJson) ?? new List<string>();
 		}
 	}
 }

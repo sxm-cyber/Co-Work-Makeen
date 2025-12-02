@@ -10,8 +10,6 @@
 
         public string FourthWord { get; private set; }
 
-        public DateTime UpdateAt { get; private set; }
-
 
         public MoreThanAcademy() { }
 
@@ -21,9 +19,16 @@
             FirstWord = firstWord;
             SecondWord = secondWord;
             ThirdWord = thirdWord;
-            FourthWord = fourthWord;
-            UpdateAt = DateTime.UtcNow;
-           
+            FourthWord = fourthWord;  
         }
+
+        //public void Update(string firstWord , string secondWord , string thirdWord , string fourthWord)
+        //{
+        //    FirstWord = firstWord;
+        //    SecondWord = secondWord;
+        //    ThirdWord = thirdWord;
+        //    FourthWord = fourthWord;
+        //    UpdateTimestamp();
+        //}
     }
 }

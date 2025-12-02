@@ -2,18 +2,13 @@
 
 namespace MakeenCo_Work.Domain.Models
 {
-	public class BlogPost
+	public class BlogPost : BaseModel
 	{
-		public Guid Id { get; private set; }
-
-
 		[Required , MaxLength(200)]
 		public string Title { get; private set; }
 
-
 		[MaxLength(500)]
 		public string? Summary { get; private set; }
-
 
 		[Required]
 		public string Content { get; private set; }
@@ -28,10 +23,6 @@ namespace MakeenCo_Work.Domain.Models
 
 		public int ViewCount { get; private set; }
 
-		public DateTime CreatedAt { get; private set; }
-
-		public DateTime? UpdatedAt { get; private set; }
-
 		public DateTime? PublishedAt { get; private set; }
 
 		public Guid AuthorId { get; private set; }
@@ -43,7 +34,6 @@ namespace MakeenCo_Work.Domain.Models
 
 		public BlogPost(string title, string content, Guid authorId, string category, string? summary = null, string? featuredImageUrl = null, string file = null)
 		{
-			Id = Guid.NewGuid();
 			Title = title;
 			Content = content;
 			AuthorId = authorId;
@@ -51,7 +41,6 @@ namespace MakeenCo_Work.Domain.Models
 			FeaturedImageUrl = featuredImageUrl;
 			IsPublished = false;
 			ViewCount = 0;
-			CreatedAt = DateTime.UtcNow;
 			File = file;
 			Category = category;
 
@@ -63,38 +52,37 @@ namespace MakeenCo_Work.Domain.Models
 			Title = title;
 			Content = content;
 			Summary = summary;
-	
-			UpdatedAt = DateTime.UtcNow;
+			UpdateTimestamp();
 		}
 
 
 		public void UpdateFeatureImage(string featuredImageUrl)
 		{
 			FeaturedImageUrl = featuredImageUrl;
-			UpdatedAt = DateTime.UtcNow;
-		}
+            UpdateTimestamp();
+        }
 
 
 		public void Publish()
 		{
 			IsPublished = true;
 			PublishedAt = DateTime.UtcNow;
-			UpdatedAt = DateTime.UtcNow;
-		}
+            UpdateTimestamp();
+        }
 
 
 		public void Unpublish()
 		{
 			IsPublished = false;
-			UpdatedAt = DateTime.UtcNow;
-		}
+            UpdateTimestamp();
+        }
 
 
 		public void IncrementViewCount()
 		{
 			ViewCount++;
-			UpdatedAt = DateTime.UtcNow;
-		}
+            UpdateTimestamp();
+        }
 	}
 }
 
