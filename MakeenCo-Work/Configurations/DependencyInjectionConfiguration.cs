@@ -2,6 +2,7 @@
 using MakeenCo_Work.Application.IServices;
 using MakeenCo_Work.Application.Services;
 using MakeenCo_Work.Domain.IRepository;
+using MakeenCo_Work.Domain.Repositories;
 using MakeenCo_Work.Infrastructure.Repositories;
 using MakeenCo_Work.Infrastructure.Repository;
 using MakeenCo_Work.Infrastructure.UnitOfWork;
@@ -20,7 +21,9 @@ namespace MakeenCo_Work.Configurations
             service.AddScoped<IMessageRepository, MessageRepository>();
             service.AddScoped<ITieredDiscountRepository, TieredDiscountRepository>();
             service.AddScoped<IDiscountCodeRepository, DiscountCodeRepository>();
-            
+            service.AddScoped<IReservationRepository, ReservationRepository>();
+            service.AddScoped<ISpaceRepository, SpaceRepository>();
+            service.AddScoped<IBlogPostRepository, BlogPostRepository>();
 
 
 
@@ -37,6 +40,9 @@ namespace MakeenCo_Work.Configurations
             service.AddScoped<IMessageService, MessageService>();
             service.AddScoped<IDiscountCodeService, DiscountCodeService>();
             service.AddScoped<ITieredDiscountService, TieredDiscountService>();
+            service.AddScoped<IBlogPostService, BlogPostService>();
+            service.AddScoped<IReservationService, ReservationService>();
+            service.AddScoped<ISpaceService, SpaceService>();
         }
     }
 }

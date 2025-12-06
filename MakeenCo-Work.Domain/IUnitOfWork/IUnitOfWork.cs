@@ -1,4 +1,5 @@
 ﻿using MakeenCo_Work.Domain.IRepository;
+using MakeenCo_Work.Domain.Repositories;
 using System.Threading.Tasks;
 
 namespace MakeenCo_Work.Application.Interfaces
@@ -7,6 +8,7 @@ namespace MakeenCo_Work.Application.Interfaces
     {
         IReservationRepository Reservations { get; }
         ISpaceRepository Spaces { get; }
+        IBlogPostRepository BlogPosts { get; }
         Task<int> CompleteAsync();
     }
 }

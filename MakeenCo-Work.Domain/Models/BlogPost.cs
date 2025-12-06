@@ -83,6 +83,11 @@ namespace MakeenCo_Work.Domain.Models
 			ViewCount++;
             UpdateTimestamp();
         }
-	}
+
+        public void UpdateFile(string filePath)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
 
