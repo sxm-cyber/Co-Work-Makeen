@@ -8,24 +8,15 @@ using Microsoft.Extensions.Configuration;
 
 namespace MakeenCo_Work.Infrastructure.Repository
 {
-	public class MessageRepository : IMessageRepository
+    public class MessageRepository : BaseRepository<Message> , IMessageRepository
     {
-		private readonly ApplicationDbContext _context;
 		private readonly string? _connectionString;
 
 
-		public MessageRepository(ApplicationDbContext context , IConfiguration configuration)
+		public MessageRepository(ApplicationDbContext context , IConfiguration configuration) : base(context)
 		{
-			_context = context;
 			_connectionString = configuration.GetConnectionString("DefaultConnection");
 		}
-
-
-        public async Task<Message?> GetByIdAsync(Guid id)
-        {
-            // Use EF Core instead of Dapper for better mapping
-            return await _context.Messages.FindAsync(id);
-        }
 
 
         public async Task<IEnumerable<Message>> GetInboxAsync(Guid userId, MessageStatus? status = null, int pageNumber = 1, int pageSize = 10)
@@ -98,45 +89,10 @@ namespace MakeenCo_Work.Infrastructure.Repository
         }
 
 
-        public async Task<bool> CreateAsync(Message message)
-        {
-            await _context.Messages.AddAsync(message);
-
-            var result = await _context.SaveChangesAsync();
-
-            return result > 0;
-        }
-
-
         public async Task<bool> CreateBulkAsync(List<Message> messages)
         {
             await _context.Messages.AddRangeAsync(messages);
             var result = await _context.SaveChangesAsync();
-            return result > 0;
-        }
-
-
-        public async Task<bool> UpdateAsync(Message message)
-        {
-            _context.Messages.Update(message);
-
-            var result = await _context.SaveChangesAsync();
-
-            return result > 0;
-        }
-
-
-        public async Task<bool> DeleteAsync(Guid id)
-        {
-            var message = await _context.Messages.FindAsync(id);
-
-            if (message is null)
-                return false;
-
-            _context.Messages.Remove(message);
-
-            var result = await _context.SaveChangesAsync();
-
             return result > 0;
         }
 
@@ -156,4 +112,3 @@ namespace MakeenCo_Work.Infrastructure.Repository
         }
     }
 }
-
