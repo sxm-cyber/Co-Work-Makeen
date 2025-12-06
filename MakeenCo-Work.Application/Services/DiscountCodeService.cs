@@ -153,7 +153,7 @@ namespace MakeenCo_Work.Application.Services
 
         public async Task<int> GetTotalCountAsync()
         {
-            return await _discountCodeRepository.GetTotalCountAsync();
+            return await _discountCodeRepository.GetCountAsync();
         }
 
 
