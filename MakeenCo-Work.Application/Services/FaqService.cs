@@ -1,39 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MakeenCo_Work.Application.Command;
+﻿using MakeenCo_Work.Application.Command;
 using MakeenCo_Work.Application.DTOs;
+using MakeenCo_Work.Application.Interfaces;
 using MakeenCo_Work.Application.IServices;
-using MakeenCo_Work.Domain.IRepository;
 using MakeenCo_Work.Domain.Models;
-using MakeenCo_Work.Infrastructure.Repository;
 
 namespace MakeenCo_Work.Application.Services
 {
     public class FaqService:IFaqService
     {
-        private readonly IFaqRepository _faqRepository;
-        public FaqService(IFaqRepository faqRepository)
+        private readonly IUnitOfWork _unitOfWork;
+
+        public FaqService(IUnitOfWork unitOfWork)
         {
-            _faqRepository = faqRepository;
-            
+            _unitOfWork = unitOfWork;
         }
 
         public async Task CreateFaqAsync(CreateFaqCommand command)
         {
-            await _faqRepository.CreateAsync( command.Question,command.Answer,command.PublishInMainPage,command.PublishInFrequentlyAskedQuestions,command.IsActive);
+            await _unitOfWork.Faqs.CreateAsync( command.Question,command.Answer,command.PublishInMainPage,command.PublishInFrequentlyAskedQuestions,command.IsActive);
+
+            await _unitOfWork.CompleteAsync();
         }
 
         public async Task DeleteFaqAsync(Guid id)
         {
-            await _faqRepository.DeleteAsync(id);
+            await _unitOfWork.Faqs.DeleteAsync(id);
+
+            await _unitOfWork.CompleteAsync();
         }
 
         public async Task<List<FaqDto>> GetAllFaqDtoAsync()
         {
-            List<FAQ> faqs = await _faqRepository.GetAllsync();
+            List<FAQ> faqs = await _unitOfWork.Faqs.GetAllsync();
             List<FaqDto> result = faqs.Select(f => new FaqDto
             {
                 Id = f.Id,
@@ -49,7 +47,7 @@ namespace MakeenCo_Work.Application.Services
 
         public async Task<FaqDto?> GetByIdAsync(Guid id)
         {
-            var faq = await _faqRepository.GetByIdAsync(id);
+            var faq = await _unitOfWork.Faqs.GetByIdAsync(id);
             if (faq == null) return null;
 
             return new FaqDto
@@ -65,7 +63,9 @@ namespace MakeenCo_Work.Application.Services
 
         public async Task UpdateFaqAsync(UpdateFaqCommand command)
         {
-            await _faqRepository.UpdateAsync( command.Id,command.Question,command.Answer,command.PublishInMainPage,command.PublishInFrequentlyAskedQuestions,command.IsActive);
+            await _unitOfWork.Faqs.UpdateAsync( command.Id,command.Question,command.Answer,command.PublishInMainPage,command.PublishInFrequentlyAskedQuestions,command.IsActive);
+
+            await _unitOfWork.CompleteAsync();
         }
     }
 }

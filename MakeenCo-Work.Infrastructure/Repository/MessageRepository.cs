@@ -19,6 +19,16 @@ namespace MakeenCo_Work.Infrastructure.Repository
 		}
 
 
+        public override async Task<Message?> GetByIdAsync(Guid id)
+        {
+            using var connection = new SqlConnection(_connectionString);
+
+            var sql = "SELECT * FROM Message WHERE Id = @Id";
+
+            return await connection.QueryFirstOrDefaultAsync<Message>(sql, new { Id = id });
+        }
+
+
         public async Task<IEnumerable<Message>> GetInboxAsync(Guid userId, MessageStatus? status = null, int pageNumber = 1, int pageSize = 10)
         {
             using var connection = new SqlConnection(_connectionString);
@@ -92,8 +102,8 @@ namespace MakeenCo_Work.Infrastructure.Repository
         public async Task<bool> CreateBulkAsync(List<Message> messages)
         {
             await _context.Messages.AddRangeAsync(messages);
-            var result = await _context.SaveChangesAsync();
-            return result > 0;
+
+            return true;
         }
 
 
@@ -106,9 +116,9 @@ namespace MakeenCo_Work.Infrastructure.Repository
 
             message.MarkAsRead();
 
-            var result = await _context.SaveChangesAsync();
+            _context.Messages.Update(message);
 
-            return result > 0;
+            return true;
         }
     }
 }

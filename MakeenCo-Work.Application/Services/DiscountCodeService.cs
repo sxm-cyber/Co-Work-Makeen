@@ -1,24 +1,24 @@
 ﻿using MakeenCo_Work.Application.Command.DiscountCode;
 using MakeenCo_Work.Application.DTOs.DiscountCode;
+using MakeenCo_Work.Application.Interfaces;
 using MakeenCo_Work.Application.IServices;
-using MakeenCo_Work.Domain.IRepository;
 using MakeenCo_Work.Domain.Models;
 
 namespace MakeenCo_Work.Application.Services
 {
 	public class DiscountCodeService : IDiscountCodeService
     {
-		private readonly IDiscountCodeRepository _discountCodeRepository;
+		private readonly IUnitOfWork _unitOfWork;
 
-		public DiscountCodeService(IDiscountCodeRepository discountCodeRepository)
+		public DiscountCodeService(IUnitOfWork unitOfWork)
 		{
-			_discountCodeRepository = discountCodeRepository;
+            _unitOfWork = unitOfWork;
 		}
 
 
         public async Task<DiscountCodeDto?> GetByIdAsync(Guid id)
         {
-            var discountCode = await _discountCodeRepository.GetByIdAsync(id);
+            var discountCode = await _unitOfWork.DiscountCodes.GetByIdAsync(id);
 
             if (discountCode is null)
                 return null;
@@ -29,7 +29,7 @@ namespace MakeenCo_Work.Application.Services
 
         public async Task<DiscountCodeDto?> GeyByCodeAsync(string code)
         {
-            var discountCode = await _discountCodeRepository.GetByCodeAsync(code);
+            var discountCode = await _unitOfWork.DiscountCodes.GetByCodeAsync(code);
 
             if (discountCode is null)
                 return null;
@@ -40,7 +40,7 @@ namespace MakeenCo_Work.Application.Services
 
         public async Task<IEnumerable<DiscountCodeDto>> GetAllAsync(int pageNumber = 1, int pageSize = 10)
         {
-            var discountCodes = await _discountCodeRepository.GetAllAsync(pageNumber, pageSize);
+            var discountCodes = await _unitOfWork.DiscountCodes.GetAllAsync(pageNumber, pageSize);
 
             return discountCodes.Select(MapToDto);
         }
@@ -48,7 +48,7 @@ namespace MakeenCo_Work.Application.Services
 
         public async Task<IEnumerable<DiscountCodeDto>> GetActiveAsync()
         {
-            var discountCode = await _discountCodeRepository.GetActiveAsync();
+            var discountCode = await _unitOfWork.DiscountCodes.GetActiveAsync();
 
             return discountCode.Select(MapToDto);
         }
@@ -56,7 +56,7 @@ namespace MakeenCo_Work.Application.Services
 
         public async Task<IEnumerable<DiscountCodeDto>> GetExpiredAsync()
         {
-            var discountCodes = await _discountCodeRepository.GetExpiredAsync();
+            var discountCodes = await _unitOfWork.DiscountCodes.GetExpiredAsync();
 
             return discountCodes.Select(MapToDto);
         }
@@ -82,7 +82,9 @@ namespace MakeenCo_Work.Application.Services
             if (command.UsageLimit.HasValue)
                 discountCode.SetUsageLimit(command.UsageLimit.Value);
 
-            await _discountCodeRepository.CreateAsync(discountCode);
+            await _unitOfWork.DiscountCodes.CreateAsync(discountCode);
+
+            await _unitOfWork.CompleteAsync();
 
             return MapToDto(discountCode);
         }
@@ -90,7 +92,7 @@ namespace MakeenCo_Work.Application.Services
 
         public async Task<bool> UpdateAsync(Guid id, UpdateDiscountCodeCommand command)
         {
-            var discountCode = await _discountCodeRepository.GetByIdAsync(id);
+            var discountCode = await _unitOfWork.DiscountCodes.GetByIdAsync(id);
 
             if (discountCode is null)
                 return false;
@@ -122,44 +124,56 @@ namespace MakeenCo_Work.Application.Services
             else
                 discountCode.SetUsageLimit(null);
 
-            return await _discountCodeRepository.UpdateAsync(discountCode);
+            await _unitOfWork.DiscountCodes.UpdateAsync(discountCode);
+
+            await _unitOfWork.CompleteAsync();
+
+            return true;
         }
 
 
         public async Task<bool> DeleteAsync(Guid id)
         {
-            return await _discountCodeRepository.DeleteAsync(id);
+            await _unitOfWork.DiscountCodes.DeleteAsync(id);
+
+            await _unitOfWork.CompleteAsync();
+
+            return true;
         }
 
 
         public async Task<bool> ToggleActiveAsync(Guid id)
         {
-            var discountCode = await _discountCodeRepository.GetByIdAsync(id);
+            var discountCode = await _unitOfWork.DiscountCodes.GetByIdAsync(id);
 
             if (discountCode is null)
                 return false;
 
             discountCode.SetActive(!discountCode.IsActive);
 
-            return await _discountCodeRepository.UpdateAsync(discountCode);
+            await _unitOfWork.DiscountCodes.UpdateAsync(discountCode);
+
+            await _unitOfWork.CompleteAsync();
+
+            return true;
         }
 
 
         public async Task<bool> DeactiveAllAsync()
         {
-            return await _discountCodeRepository.DeactiveAllAsync();
+            return await _unitOfWork.DiscountCodes.DeactiveAllAsync();
         }
 
 
         public async Task<int> GetTotalCountAsync()
         {
-            return await _discountCodeRepository.GetCountAsync();
+            return await _unitOfWork.DiscountCodes.GetCountAsync();
         }
 
 
         public async Task<bool> ValidateDiscountCodeAsync(string code)
         {
-            var discountCode = await _discountCodeRepository.GetByCodeAsync(code);
+            var discountCode = await _unitOfWork.DiscountCodes.GetByCodeAsync(code);
 
             if (discountCode is null)
                 return false;
@@ -189,4 +203,3 @@ namespace MakeenCo_Work.Application.Services
 		}
 	}
 }
-

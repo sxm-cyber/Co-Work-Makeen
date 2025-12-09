@@ -1,8 +1,8 @@
 ﻿using MakeenCo_Work.Application.Command;
 using MakeenCo_Work.Application.Command.User;
 using MakeenCo_Work.Application.DTOs.User;
+using MakeenCo_Work.Application.Interfaces;
 using MakeenCo_Work.Application.IServices;
-using MakeenCo_Work.Domain.IRepository;
 using MakeenCo_Work.Domain.Models;
 using Microsoft.AspNetCore.Identity;
 
@@ -10,12 +10,12 @@ namespace MakeenCo_Work.Application.Services
 {
 	public class UserService : IUserService
 	{
-		private readonly IUserRepository _userRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<User> _userManager;
 
-		public UserService(IUserRepository userRepository , UserManager<User> userManager)
+		public UserService(IUnitOfWork unitOfWork , UserManager<User> userManager)
 		{
-			_userRepository = userRepository;
+            _unitOfWork = unitOfWork;
             _userManager = userManager;
 		}
 
@@ -41,7 +41,7 @@ namespace MakeenCo_Work.Application.Services
 
         public async Task<UserDto?> GetByIdAsync(Guid id)
         {
-            var user = await _userRepository.GetByIdAsync(id);
+            var user = await _unitOfWork.Users.GetByIdAsync(id);
 
             if (user is null)
                 return null;
@@ -53,7 +53,7 @@ namespace MakeenCo_Work.Application.Services
 
         public async Task<UserDto?> GetByNationalCodeAsync(string nationalCode)
         {
-            var user = await _userRepository.GetByNationalCodeAsync(nationalCode);
+            var user = await _unitOfWork.Users.GetByNationalCodeAsync(nationalCode);
 
             if (user is null)
                 return null;
@@ -64,80 +64,103 @@ namespace MakeenCo_Work.Application.Services
 
         public async Task<IEnumerable<UserDto>> GetAllAsync(int pageNumber = 1, int pageSize = 10)
         {
-            var users = await _userRepository.GetAllAsync(pageNumber, pageSize);
+            var users = await _unitOfWork.Users.GetAllAsync(pageNumber, pageSize);
             return users.Select(MapToDto);
         }
 
 
         public async Task<bool> UpdateAsync(Guid id, UpdateUserCommand updateUserCommand)
         {
-            var user = await _userRepository.GetByIdAsync(id);
+            var user = await _unitOfWork.Users.GetByIdAsync(id);
 
             if (user is null)
                 return false;
 
             user.UpdateProfile(updateUserCommand.FirstName, updateUserCommand.LastName, updateUserCommand.PhoneNumber);
-            return await _userRepository.UpdateAsync(user);
+
+            await _unitOfWork.Users.UpdateAsync(user);
+
+            await _unitOfWork.CompleteAsync();
+
+            return true;
         }
 
 
         public async Task<bool> DeleteAsync(Guid id)
         {
-            return await _userRepository.DeleteAsync(id);
+            await _unitOfWork.Users.DeleteAsync(id);
+
+            await _unitOfWork.CompleteAsync();
+
+            return true;
         }
 
 
         public async Task<bool> ActivateAsync(Guid id)
         {
-            var user = await _userRepository.GetByIdAsync(id);
+            var user = await _unitOfWork.Users.GetByIdAsync(id);
 
             if (user is null)
                 return false;
 
             user.SetActive(true);
-            return await _userRepository.UpdateAsync(user);
+
+            await _unitOfWork.Users.UpdateAsync(user);
+
+            await _unitOfWork.CompleteAsync();
+
+            return true;
         }
 
 
         public async Task<bool> DeactivateAsync(Guid id)
         {
-            var user = await _userRepository.GetByIdAsync(id);
+            var user = await _unitOfWork.Users.GetByIdAsync(id);
 
             if (user is null)
                 return false;
 
             user.SetActive(false);
-            return await _userRepository.UpdateAsync(user);
+
+            await _unitOfWork.Users.UpdateAsync(user);
+
+            await _unitOfWork.CompleteAsync();
+
+            return true;
         }
 
 
         public async Task<bool> SetMandatoryCoworkingAsync(Guid userId , bool isMandatory)
         {
-            var user = await _userRepository.GetByIdAsync(userId);
+            var user = await _unitOfWork.Users.GetByIdAsync(userId);
 
             if (user is null)
                 return false;
 
             user.SetMandatoryCoworking(isMandatory);
 
-            return await _userRepository.UpdateAsync(user);
+            await _unitOfWork.Users.UpdateAsync(user);
+
+            await _unitOfWork.CompleteAsync();
+
+            return true;
         }
 
 
         public async Task<int> GetToTalCountAsync()
         {
-            return await _userRepository.GetTotalCountAsync();
+            return await _unitOfWork.Users.GetTotalCountAsync();
         }
 
         public async Task<UserDto> RegisterByAdminAsync(AdminRegisterUserCommand command)
         {
             //Check User Existing
-            var existingUserByNationalCode = await _userRepository.GetByNationalCodeAsync(command.NationalCode);
+            var existingUserByNationalCode = await _unitOfWork.Users.GetByNationalCodeAsync(command.NationalCode);
 
             if (existingUserByNationalCode is not null)
                 throw new Exception("User With This NationalCode Already Exists");
 
-            var existingUserByPhoneNumber = await _userRepository.GetByPhoneNumberAsync(command.PhoneNumber);
+            var existingUserByPhoneNumber = await _unitOfWork.Users.GetByPhoneNumberAsync(command.PhoneNumber);
 
             if (existingUserByPhoneNumber is not null)
                 throw new Exception("User With This PhoneNumber Already Exists");
@@ -165,4 +188,3 @@ namespace MakeenCo_Work.Application.Services
         }
     }
 }
-

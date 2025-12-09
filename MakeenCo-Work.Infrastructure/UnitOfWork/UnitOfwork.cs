@@ -1,9 +1,11 @@
 ﻿using MakeenCo_Work.Application.Interfaces;
 using MakeenCo_Work.Domain.IRepository;
+using MakeenCo_Work.Domain.Models;
 using MakeenCo_Work.Domain.Repositories;
 using MakeenCo_Work.Infrastructure.Data;
 using MakeenCo_Work.Infrastructure.Repositories;
 using MakeenCo_Work.Infrastructure.Repository;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 
 namespace MakeenCo_Work.Infrastructure.UnitOfWork
@@ -34,12 +36,12 @@ namespace MakeenCo_Work.Infrastructure.UnitOfWork
 
         public IBlogPostRepository BlogPosts { get; }
 
-        public UnitOfWork(ApplicationDbContext context , IConfiguration configuration)
+        public UnitOfWork(ApplicationDbContext context , IConfiguration configuration , UserManager<User> userManager)
         {
             _Context = context;
 
 
-            Users = new UserRepository(context, null, configuration);
+            Users = new UserRepository(context, userManager, configuration);
 
             Faqs = new FaqRepository(context);
 
@@ -49,7 +51,7 @@ namespace MakeenCo_Work.Infrastructure.UnitOfWork
 
             DiscountCodes = new DiscountCodeRepository(context, configuration);
 
-            TieredDiscounts = new TieredDiscountRepository(context , configuration);
+            TieredDiscounts = new TieredDiscountRepository(context);
 
             Messages = new MessageRepository(context, configuration);
 

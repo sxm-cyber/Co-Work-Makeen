@@ -4,8 +4,8 @@ using System.Text;
 using MakeenCo_Work.Application.Command;
 using MakeenCo_Work.Application.DTOs.Auth;
 using MakeenCo_Work.Application.DTOs.User;
+using MakeenCo_Work.Application.Interfaces;
 using MakeenCo_Work.Application.IServices;
-using MakeenCo_Work.Domain.IRepository;
 using MakeenCo_Work.Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -15,15 +15,15 @@ namespace MakeenCo_Work.Application.Services
 {
 	public class AuthService : IAuthService
 	{
-		private readonly IUserRepository _userRepository;
+		private readonly IUnitOfWork _unitOfWork;
 		private readonly UserManager<User> _userManager;
 		private readonly IConfiguration _configuration;
         private readonly IOtpService _otpService;
 
 
-		public AuthService(IUserRepository userRepository , UserManager<User> userManager , IConfiguration configuration , IOtpService otpService)
+		public AuthService(IUnitOfWork unitOfWork, UserManager<User> userManager , IConfiguration configuration , IOtpService otpService)
 		{
-			_userRepository = userRepository;
+            _unitOfWork = unitOfWork;
 			_userManager = userManager;
 			_configuration = configuration;
             _otpService = otpService;
@@ -66,9 +66,13 @@ namespace MakeenCo_Work.Application.Services
                 return null;
 
             user.UpdateLastLogin();
-            await _userRepository.UpdateAsync(user);
+
+            await _unitOfWork.Users.UpdateAsync(user);
+
+            await _unitOfWork.CompleteAsync();
 
             var userDto = MapToUserDto(user);
+
             var token = GenerateJwtToken(userDto, roles);
 
             return new LoginResponseDto
@@ -111,16 +115,21 @@ namespace MakeenCo_Work.Application.Services
                 };
 
             //Check User Existing
-            var user = await _userRepository.GetByPhoneNumberAsync(command.PhoneNumber);
+            var user = await _unitOfWork.Users.GetByPhoneNumberAsync(command.PhoneNumber);
 
             if (user is not null)
             {
                 var role = await _userManager.GetRolesAsync(user);
+
                 var userDto = MapToUserDto(user);
+
                 var token = GenerateJwtToken(userDto, role);
 
                 user.UpdateLastLogin();
-                await _userRepository.UpdateAsync(user);
+
+                await _unitOfWork.Users.UpdateAsync(user);
+
+                await _unitOfWork.CompleteAsync();
 
                 return new VerifyOtpResponseDto
                 {
@@ -154,7 +163,7 @@ namespace MakeenCo_Work.Application.Services
                 throw new Exception("PhoneNumber Not Verified. Please Complete OTP Verification First.");
 
             //check User Existing
-            var existingUser = await _userRepository.GetByPhoneNumberAsync(command.PhoneNumber);
+            var existingUser = await _unitOfWork.Users.GetByPhoneNumberAsync(command.PhoneNumber);
 
             if (existingUser is not null)
                 throw new Exception("User Alreday Exists With This PhoneNumber");
@@ -230,4 +239,3 @@ namespace MakeenCo_Work.Application.Services
         }
     }
 }
-

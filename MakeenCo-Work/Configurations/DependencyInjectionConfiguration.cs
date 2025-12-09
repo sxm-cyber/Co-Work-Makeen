@@ -26,6 +26,9 @@ namespace MakeenCo_Work.Configurations
             service.AddScoped<IBlogPostRepository, BlogPostRepository>();
 
 
+            // Unit Of Work
+            service.AddScoped<IUnitOfWork, UnitOfWork>();
+
 
 
             //Services

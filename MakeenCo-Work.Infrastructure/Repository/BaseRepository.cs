@@ -45,9 +45,7 @@ namespace MakeenCo_Work.Infrastructure.Repository
         {
             await _dbSet.AddAsync(entity);
 
-            var result = await _context.SaveChangesAsync();
-
-            return result > 0;
+            return true;
         }
 
 
@@ -55,9 +53,7 @@ namespace MakeenCo_Work.Infrastructure.Repository
         {
             _dbSet.Update(entity);
 
-            var result = await _context.SaveChangesAsync();
-
-            return result > 0;
+            return true;
         }
 
 
@@ -70,9 +66,7 @@ namespace MakeenCo_Work.Infrastructure.Repository
 
             _dbSet.Remove(entity);
 
-            var result = await _context.SaveChangesAsync();
-
-            return result > 0;
+            return true;
         }
 
 

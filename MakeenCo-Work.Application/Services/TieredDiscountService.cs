@@ -1,24 +1,24 @@
 ﻿using MakeenCo_Work.Application.Command.DiscountCode;
 using MakeenCo_Work.Application.DTOs.DiscountCode;
+using MakeenCo_Work.Application.Interfaces;
 using MakeenCo_Work.Application.IServices;
-using MakeenCo_Work.Domain.IRepository;
 using MakeenCo_Work.Domain.Models;
 
 namespace MakeenCo_Work.Application.Services
 {
 	public class TieredDiscountService : ITieredDiscountService
     {
-		private readonly ITieredDiscountRepository _tieredDiscountRepository;
+		private readonly IUnitOfWork _unitOfWork;
 
-		public TieredDiscountService(ITieredDiscountRepository tieredDiscountRepository)
+		public TieredDiscountService(IUnitOfWork unitOfWork)
 		{
-			_tieredDiscountRepository = tieredDiscountRepository;
+			_unitOfWork = unitOfWork;
 		}
 
 
         public async Task<TieredDiscountDto?> GetActiveAsync()
         {
-			var tieredDiscount = await _tieredDiscountRepository.GetActiveAsync();
+			var tieredDiscount = await _unitOfWork.TieredDiscounts.GetActiveAsync();
 
 			if (tieredDiscount is null)
 				return null;
@@ -29,13 +29,15 @@ namespace MakeenCo_Work.Application.Services
 
         public async Task<TieredDiscountDto> CreateOrUpdateAsync(UpdateTieredDiscountCommand command)
         {
-			var existing = await _tieredDiscountRepository.GetActiveAsync();
+			var existing = await _unitOfWork.TieredDiscounts.GetActiveAsync();
 
 			if(existing is null)
 			{
 				var tieredDiscount = new TieredDiscount(command.PeriodDays, command.FreeDays);
 
-				await _tieredDiscountRepository.CreateAsync(tieredDiscount);
+				await _unitOfWork.TieredDiscounts.CreateAsync(tieredDiscount);
+
+				await _unitOfWork.CompleteAsync();
 
 				return MapToDto(tieredDiscount);
 			}
@@ -43,7 +45,9 @@ namespace MakeenCo_Work.Application.Services
 			{
 				existing.Update(command.PeriodDays, command.FreeDays);
 
-				await _tieredDiscountRepository.UpdateAsync(existing);
+				await _unitOfWork.TieredDiscounts.UpdateAsync(existing);
+
+				await _unitOfWork.CompleteAsync();
 
 				return MapToDto(existing);
 			}
@@ -52,20 +56,24 @@ namespace MakeenCo_Work.Application.Services
 
         public async Task<bool> SetActiveAsync(Guid id, bool isActive)
         {
-			var tieredDiscount = await _tieredDiscountRepository.GetByIdAsync(id);
+			var tieredDiscount = await _unitOfWork.TieredDiscounts.GetByIdAsync(id);
 
 			if (tieredDiscount is null)
 				return false;
 
 			tieredDiscount.SetActive(isActive);
 
-			return await _tieredDiscountRepository.UpdateAsync(tieredDiscount);
+			await _unitOfWork.TieredDiscounts.UpdateAsync(tieredDiscount);
+
+			await _unitOfWork.CompleteAsync();
+
+			return true;
         }
 
 
         public async Task<int> CalculatePaidDaysAsync(int reservedDays)
         {
-			var tieredDiscount = await _tieredDiscountRepository.GetActiveAsync();
+			var tieredDiscount = await _unitOfWork.TieredDiscounts.GetActiveAsync();
 
 			if (tieredDiscount is null || !tieredDiscount.IsActive)
 				return reservedDays;
@@ -94,4 +102,3 @@ namespace MakeenCo_Work.Application.Services
 		}
 	}
 }
-

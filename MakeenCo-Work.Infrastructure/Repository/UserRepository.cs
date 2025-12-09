@@ -104,9 +104,7 @@ namespace MakeenCo_Work.Infrastructure.Repository
         {
             _context.Users.Update(user);
 
-            var result = await _context.SaveChangesAsync();
-
-            return result > 0;
+            return true;
         }
 
 
@@ -119,9 +117,7 @@ namespace MakeenCo_Work.Infrastructure.Repository
 
             _context.Users.Remove(user);
 
-            var result = await _context.SaveChangesAsync();
-
-            return result > 0;
+            return true;
         }
 
         

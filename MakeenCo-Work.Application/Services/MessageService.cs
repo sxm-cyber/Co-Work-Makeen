@@ -1,37 +1,35 @@
 ﻿using MakeenCo_Work.Application.Command.Message;
 using MakeenCo_Work.Application.DTOs;
 using MakeenCo_Work.Application.DTOs.Message;
+using MakeenCo_Work.Application.Interfaces;
 using MakeenCo_Work.Application.IServices;
 using MakeenCo_Work.Domain.Enums;
-using MakeenCo_Work.Domain.IRepository;
 using MakeenCo_Work.Domain.Models;
 
 namespace MakeenCo_Work.Application.Services
 {
 	public class MessageService : IMessageService
 	{
-		private readonly IMessageRepository _messageRepository;
-		private readonly IUserRepository _userRepository;
+        private readonly IUnitOfWork _unitOfWork;
 		private readonly IFileStorageService _fileStorageService;
 
-		public MessageService(IMessageRepository messageRepository , IUserRepository userRepository , IFileStorageService fileStorageService)
+		public MessageService(IUnitOfWork unitOfWork, IFileStorageService fileStorageService)
 		{
-			_messageRepository = messageRepository;
-			_userRepository = userRepository;
+            _unitOfWork = unitOfWork;
 			_fileStorageService = fileStorageService;
 		}
 
 
         public async Task<MessageDetailDto?> GetByIdAsync(Guid id)
         {
-            var message = await _messageRepository.GetByIdAsync(id);
+            var message = await _unitOfWork.Messages.GetByIdAsync(id);
 
             if (message is null)
                 return null;
 
-            var sender = await _userRepository.GetByIdAsync(message.SenderId);
+            var sender = await _unitOfWork.Users.GetByIdAsync(message.SenderId);
 
-            var recipient = await _userRepository.GetByIdAsync(message.RecipientId);
+            var recipient = await _unitOfWork.Users.GetByIdAsync(message.RecipientId);
 
             return new MessageDetailDto
             {
@@ -60,13 +58,13 @@ namespace MakeenCo_Work.Application.Services
 
         public async Task<IEnumerable<MessageDto>> GetInboxAsync(Guid userId, MessageStatus? status = null, int pageNumber = 1, int pageSize = 10)
         {
-            var messages = await _messageRepository.GetInboxAsync(userId, status, pageNumber, pageSize);
+            var messages = await _unitOfWork.Messages.GetInboxAsync(userId, status, pageNumber, pageSize);
 
             var messageDtos = new List<MessageDto>();
 
             foreach(var message in messages)
             {
-                var sender = await _userRepository.GetByIdAsync(message.SenderId);
+                var sender = await _unitOfWork.Users.GetByIdAsync(message.SenderId);
                 messageDtos.Add(new MessageDto
                 {
                     Id = message.Id,
@@ -88,13 +86,13 @@ namespace MakeenCo_Work.Application.Services
 
         public async Task<IEnumerable<MessageDto>> GetSentMessagesAsync(Guid userId, int pageNumber = 1, int pageSize = 10)
         {
-            var messages = await _messageRepository.GetSentMessagesAsync(userId, pageNumber, pageSize);
+            var messages = await _unitOfWork.Messages.GetSentMessagesAsync(userId, pageNumber, pageSize);
 
             var messageDtos = new List<MessageDto>();
 
             foreach(var message in messages)
             {
-                var recipient = await _userRepository.GetByIdAsync(message.RecipientId);
+                var recipient = await _unitOfWork.Users.GetByIdAsync(message.RecipientId);
                 messageDtos.Add(new MessageDto
                 {
                     Id = message.Id,
@@ -116,19 +114,19 @@ namespace MakeenCo_Work.Application.Services
 
         public async Task<int> GetInboxCountAsync(Guid userId, MessageStatus? status = null)
         {
-            return await _messageRepository.GetInboxCountAsync(userId, status);
+            return await _unitOfWork.Messages.GetInboxCountAsync(userId, status);
         }
 
 
         public async Task<int> GetUnreadCountAsync(Guid userId)
         {
-            return await _messageRepository.GetUnreadCountAsync(userId);
+            return await _unitOfWork.Messages.GetUnreadCountAsync(userId);
         }
 
 
         public async Task<List<RecipientSearchDto>> SearchRecipientsAsync(string searchTerm)
         {
-            var users = await _userRepository.GetAllAsync(1, 50);
+            var users = await _unitOfWork.Users.GetAllAsync(1, 50);
 
             var filtered = users.Where(u =>
             u.FirstName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
@@ -155,7 +153,7 @@ namespace MakeenCo_Work.Application.Services
 
             if(command.SendToAll)
             {
-                var allUsers = await _userRepository.GetActiveUsersAsync();
+                var allUsers = await _unitOfWork.Users.GetActiveUsersAsync();
 
                 recipientIds = allUsers.Select(u => u.Id).ToList();
             }
@@ -195,46 +193,65 @@ namespace MakeenCo_Work.Application.Services
                 messages.Add(message);
             }
 
-            return await _messageRepository.CreateBulkAsync(messages);
+            await _unitOfWork.Messages.CreateBulkAsync(messages);
+
+            await _unitOfWork.CompleteAsync();
+
+            return true;
         }
 
 
         public async Task<bool> MarkAsReadAsync(Guid messageId)
         {
-            return await _messageRepository.MarkAsReadAsync(messageId);
+            await _unitOfWork.Messages.MarkAsReadAsync(messageId);
+
+            await _unitOfWork.CompleteAsync();
+
+            return true;
         }
 
 
         public async Task<bool> ApproveMessageAsync(Guid messageId)
         {
-            var message = await _messageRepository.GetByIdAsync(messageId);
+            var message = await _unitOfWork.Messages.GetByIdAsync(messageId);
 
             if (message is null)
                 return false;
 
             message.Approve();
 
-            return await _messageRepository.UpdateAsync(message);
+            await _unitOfWork.Messages.UpdateAsync(message);
+
+            await _unitOfWork.CompleteAsync();
+
+            return true;
         }
 
 
         public async Task<bool> RejectedMessageAsync(Guid messageId)
         {
-            var message = await _messageRepository.GetByIdAsync(messageId);
+            var message = await _unitOfWork.Messages.GetByIdAsync(messageId);
 
             if (message is null)
                 return false;
 
             message.Reject();
 
-            return await _messageRepository.UpdateAsync(message);
+            await _unitOfWork.Messages.UpdateAsync(message);
+
+            await _unitOfWork.CompleteAsync();
+
+            return true;
         }
 
 
         public async Task<bool> DeleteAsync(Guid messageId)
         {
-            return await _messageRepository.DeleteAsync(messageId);
+            await _unitOfWork.Messages.DeleteAsync(messageId);
+
+            await _unitOfWork.CompleteAsync();
+
+            return true;
         }
     }
 }
-
