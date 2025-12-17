@@ -1,5 +1,6 @@
-﻿using MakeenCo_Work.Application.IServices;
-using Microsoft.Extensions.Caching.Memory;
+﻿using System.Text;
+using MakeenCo_Work.Application.IServices;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -7,12 +8,12 @@ namespace MakeenCo_Work.Application.Services
 {
 	public class OtpService : IOtpService
 	{
-		private readonly IMemoryCache _cache;
+		private readonly IDistributedCache _cache;
 		private readonly IConfiguration _configuration;
 		private readonly ILogger<OtpService> _logger;
 
 
-		public OtpService(IMemoryCache cache , IConfiguration configuration , ILogger<OtpService> logger)
+		public OtpService(IDistributedCache cache , IConfiguration configuration , ILogger<OtpService> logger)
 		{
 			_cache = cache;
 			_configuration = configuration;
@@ -29,30 +30,41 @@ namespace MakeenCo_Work.Application.Services
 
             //Store In Cache
             var expirySeconds = _configuration.GetValue<int>("Otp:ExpiryInSeconds", 120);
-            var cacheKey = $"OTP _{phoneNumber}";
+            var cacheKey = $"OTP_{phoneNumber}";
 
-            _cache.Set(cacheKey, otp, TimeSpan.FromSeconds(expirySeconds));
+            var options = new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(expirySeconds)
+            };
 
-            _logger.LogInformation($"OTP Generated For {phoneNumber}: {otp}");
+            var otpBytes = Encoding.UTF8.GetBytes(otp);
+            await _cache.SetAsync(cacheKey, otpBytes, options);
 
-            return await Task.FromResult(otp);
+            _logger.LogInformation($"OTP Generated For {phoneNumber}: {otp} ");
+
+            return otp;
         }
 
 
         public async Task<bool> ValidateOtpAsync(string phoneNumber, string otp)
         {
-            var cacheKey = $"OTP _{phoneNumber}";
+            var cacheKey = $"OTP_{phoneNumber}";
 
-            if(_cache.TryGetValue(cacheKey, out string cachedOtp))
+            var cachedOtpBytes = await _cache.GetAsync(cacheKey);
+
+            if(cachedOtpBytes is not null)
             {
+                var cachedOtp = Encoding.UTF8.GetString(cachedOtpBytes);
+
                 if(cachedOtp == otp)
                 {
-                    _cache.Remove(cacheKey);
-                    return await Task.FromResult(true);
+                    await _cache.RemoveAsync(cacheKey);
+
+                    return true;
                 }
             }
 
-            return await Task.FromResult(false);
+            return false;
         }
 
 
@@ -68,9 +80,16 @@ namespace MakeenCo_Work.Application.Services
 
         public async Task MarkPhoneAsVerifiedAsync(string phoneNumber)
         {
-            var cacheKey = $"VERIFIED _{phoneNumber}";
+            var cacheKey = $"VERIFIED_{phoneNumber}";
 
-            _cache.Set(cacheKey, true, TimeSpan.FromMinutes(10));
+            var options = new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10)
+            };
+
+            var valueBytes = Encoding.UTF8.GetBytes("true");
+
+            await _cache.SetAsync(cacheKey, valueBytes, options);
 
             await Task.CompletedTask;
         }
@@ -78,15 +97,17 @@ namespace MakeenCo_Work.Application.Services
 
         public async Task<bool> IsPhoneVerifiedAsync(string phoneNumber)
         {
-            var cacheKey = $"VERIFIED _{phoneNumber}";
+            var cacheKey = $"VERIFIED_{phoneNumber}";
 
-            return await Task.FromResult(_cache.TryGetValue(cacheKey, out bool _));
+            var cachedBytes = await _cache.GetAsync(cacheKey);
+
+            return cachedBytes != null;
         }
 
 
         public async Task ClearPhoneVerificationAsync(string phoneNumber)
         {
-            var cacheKey = $"VERIFIED _{phoneNumber}";
+            var cacheKey = $"VERIFIED_{phoneNumber}";
 
             _cache.Remove(cacheKey);
 

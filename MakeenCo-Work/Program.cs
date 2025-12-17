@@ -20,6 +20,14 @@ builder.Services.AddJwtAuthentication(builder.Configuration);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 
+//redis Cahce Configuration
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    options.InstanceName = "MakeenCoWork:";
+});
+
+
 // Memmory Cache
 builder.Services.AddMemoryCache();
 
