@@ -39,7 +39,4 @@
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Extentions\" />
-  </ItemGroup>
 </Project>
