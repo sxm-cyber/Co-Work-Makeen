@@ -2,11 +2,9 @@
 using MakeenCo_Work.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MakeenCo_Work.API.Controllers
+namespace MakeenCo_Work.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class SpaceController : ControllerBase
+    public class SpaceController : BaseApiController
     {
         private readonly ISpaceService _service;
 
@@ -24,6 +22,7 @@ namespace MakeenCo_Work.API.Controllers
 
         [HttpGet]
         public async Task<IActionResult> GetAll() => Ok(await _service.GetAllAsync());
+        
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(Guid id, [FromBody] UpdateSpaceCommand command)
         {
@@ -46,7 +45,5 @@ namespace MakeenCo_Work.API.Controllers
             if (space == null) return NotFound();
             return Ok(space);
         }
-
-
     }
 }

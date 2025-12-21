@@ -5,8 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MakeenCo_Work.Controllers
 {
-	[ApiController , Route("api/[controller]")]
-	public class AuthController : ControllerBase
+	public class AuthController : BaseApiController
 	{
 		private readonly IAuthService _authService;
 
@@ -31,64 +30,39 @@ namespace MakeenCo_Work.Controllers
 		[HttpPost("RequestOtp") , AllowAnonymous]
 		public async Task<IActionResult> RequestOtpAsync([FromBody] RequestOtpCommand command)
 		{
-			try
-			{
-				var result = await _authService.RequestOtpAsync(command);
-				return Ok(result);
-			}
-			catch(Exception ex)
-			{
-				return BadRequest(new { Message = ex.Message });
-			}
+			var result = await _authService.RequestOtpAsync(command);
+
+			return Ok(result);
 		}
 
 
 		[HttpPost("VerifyOtp") , AllowAnonymous]
 		public async Task<IActionResult> VerifyOtpAsync([FromBody] VerifyOtpCommand command)
 		{
-			try
-			{
-				var result = await _authService.VerifyOtpAsync(command);
+			var result = await _authService.VerifyOtpAsync(command);
+			
+			if(!result.IsValid)
+				return BadRequest(new {Message = result.Message});
 
-				if (!result.IsValid)
-					return BadRequest(new { Message = result.Message });
-
-				return Ok(result);
-			}
-
-			catch(Exception ex)
-			{
-				return BadRequest(new { Message = ex.Message });
-			}
+			return Ok(result);
 		}
 
 
 		[HttpPost("CompleteRegistration") , AllowAnonymous]
 		public async Task<IActionResult> CompleteRegistrationAsync([FromBody] CompleteRegistrationCommand command)
 		{
-			try
-			{
-				var result = await _authService.CompleteRegistrationAsync(command);
-				return Ok(result);
-			}
-			catch(Exception ex)
-			{
-				return BadRequest(new { Message = ex.Message });
-			}
+			var result = await _authService.CompleteRegistrationAsync(command);
+
+			return Ok(result);
 		}
 
 
 		[HttpPost("LogOut")] //[Authorize]
 		public async Task<IActionResult> LogoutAsync()
 		{
-			var idValue = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+			var _ = GetCurrentUserId();
 
-			if (string.IsNullOrEmpty(idValue))
-				return Unauthorized();
-
-			var userId = Guid.Parse(idValue);
-
-			return Ok(new { Message = "Logout Successfully" });
+			return Ok(new { Message = "LogOut Successfully" });
 		}
 	}
 }

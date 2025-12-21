@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using MakeenCo_Work.Application.Command.Message;
+﻿using MakeenCo_Work.Application.Command.Message;
 using MakeenCo_Work.Application.IServices;
 using MakeenCo_Work.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
@@ -7,10 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MakeenCo_Work.Controllers
 {
-	[ApiController]
-	[Route("api/[controller]")]
 	[Authorize]
-	public class MessageController : ControllerBase
+	public class MessageController : BaseApiController
 	{
 		private readonly IMessageService _messageService;
 
@@ -18,48 +15,30 @@ namespace MakeenCo_Work.Controllers
 		{
 			_messageService = messageService;
 		}
-
-		private Guid GetCurrentUserId()
-		{
-			var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-			if (string.IsNullOrEmpty(userIdClaim))
-				throw new UnauthorizedAccessException("User ID not found in token");
-
-			return Guid.Parse(userIdClaim);
-		}
-
-		[HttpPost("Send")]
-		[Authorize(Roles = "Admin")]
-		[Consumes("multipart/form-data")]
+		
+		[HttpPost("Send") , Authorize(Roles = "Admin") , Consumes("multipart/form-data")]
 		public async Task<IActionResult> SendMessageAsync([FromForm] SendMessageCommand command)
 		{
-			try
+			var senderId = GetCurrentUserId();
+
+			var result = await _messageService.SendMessageAsync(senderId, command);
+
+			if (!result)
 			{
-				var senderId = GetCurrentUserId();
-
-				var result = await _messageService.SendMessageAsync(senderId, command);
-
-				if (!result)
-					return BadRequest(new { 
-						Message = "Failed To Send Message",
-						SenderId = senderId,
-						RecipientCount = command.RecipientIds?.Count ?? 0
-					});
-
-				return Ok(new { 
-					Message = "Message Send Successfully",
+				return BadRequest(new
+				{
+					Message = "Failed To Send Message",
 					SenderId = senderId,
 					RecipientCount = command.RecipientIds?.Count ?? 0
 				});
 			}
-			catch(Exception ex)
+
+			return Ok(new
 			{
-				return BadRequest(new { 
-					Message = ex.Message,
-					StackTrace = ex.StackTrace,
-					InnerException = ex.InnerException?.Message
-				});
-			}
+				Message = "Message Sent Successfully",
+				SenderId = senderId,
+				RecipientCount = command.RecipientIds?.Count ?? 0
+			});
 		}
 
 		[HttpGet("Inbox")]
@@ -124,8 +103,7 @@ namespace MakeenCo_Work.Controllers
 			return NoContent();
 		}
 
-		[HttpPatch("{id}/Approve")]
-		[Authorize(Roles = "Admin")]
+		[HttpPatch("{id}/Approve") , Authorize(Roles = "Admin")]
 		public async Task<IActionResult> ApproveMessage(Guid id)
 		{
 			var result = await _messageService.ApproveMessageAsync(id);
@@ -136,8 +114,7 @@ namespace MakeenCo_Work.Controllers
 			return Ok(new { Message = "MessageApproved Successfully" });
 		}
 
-		[HttpPatch("{id}/Reject")]
-		[Authorize(Roles = "Admin")]
+		[HttpPatch("{id}/Reject") , Authorize(Roles = "Admin")]
 		public async Task<IActionResult> RejectMessageAsync(Guid id)
 		{
 			var result = await _messageService.RejectedMessageAsync(id);
@@ -148,8 +125,7 @@ namespace MakeenCo_Work.Controllers
 			return Ok(new { Message = "Message Rejected Successfully" });
 		}
 
-		[HttpGet("SearchRecipients")]
-		[Authorize(Roles = "Admin")]
+		[HttpGet("SearchRecipients") , Authorize(Roles = "Admin")]
 		public async Task<IActionResult> SearchRecipientsAsync([FromQuery] string search)
 		{
 			if (string.IsNullOrEmpty(search))
@@ -160,8 +136,7 @@ namespace MakeenCo_Work.Controllers
 			return Ok(recipients);
 		}
 
-		[HttpDelete("{id}")]
-		[Authorize(Roles = "Admin")]
+		[HttpDelete("{id}") , Authorize(Roles = "Admin")]
 		public async Task<IActionResult> DeleteAsync(Guid id)
 		{
 			var result = await _messageService.DeleteAsync(id);
@@ -174,4 +149,3 @@ namespace MakeenCo_Work.Controllers
 
 	}
 }
-

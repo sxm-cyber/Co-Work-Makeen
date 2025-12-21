@@ -1,23 +1,19 @@
 ﻿using MakeenCo_Work.Application.Command;
 using MakeenCo_Work.Application.IServices;
-using MakeenCo_Work.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MakeenCo_Work.Controllers
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class WaysOfCommunicationController : ControllerBase
+    public class WaysOfCommunicationController : BaseApiController
     {
-        private IWaysOfCommunicationService _waysOfCommunicationService;
+        private readonly IWaysOfCommunicationService _waysOfCommunicationService;
         public WaysOfCommunicationController(IWaysOfCommunicationService waysOfCommunicationService)
         {
             _waysOfCommunicationService = waysOfCommunicationService;
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync(
-            [FromBody] CreateWaysOfCommunicationCommand command)
+        public async Task<IActionResult> CreateAsync([FromBody] CreateWaysOfCommunicationCommand command)
         {
             await _waysOfCommunicationService.CreateWaysOfCommunicationAsync(command);
             return Ok();
@@ -29,6 +25,7 @@ namespace MakeenCo_Work.Controllers
             var resalt = await _waysOfCommunicationService.GetAllWaysOfCommunicationAsync();
             return Ok(resalt);
         }
+        
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIdAsync(Guid id)
         {
@@ -38,9 +35,9 @@ namespace MakeenCo_Work.Controllers
 
             return Ok(result);
         }
+        
         [HttpPut]
-        public async Task<IActionResult> UpdateAsync(
-            [FromBody] UpdateWaysOfCommunicationCommand command)
+        public async Task<IActionResult> UpdateAsync([FromBody] UpdateWaysOfCommunicationCommand command)
         {
             await _waysOfCommunicationService.UpdateWaysOfCommunicationAsync(command);
             return Ok();

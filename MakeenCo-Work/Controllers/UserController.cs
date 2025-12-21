@@ -1,15 +1,13 @@
 ﻿using MakeenCo_Work.Application.Command;
 using MakeenCo_Work.Application.Command.User;
 using MakeenCo_Work.Application.IServices;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MakeenCo_Work.Controllers
 {
 
-	[ApiController, Route("api/[controller]")] // [Authorize]
-
-	public class UserController : ControllerBase
+// [Authorize]
+	public class UserController : BaseApiController
 	{
 		private readonly IUserService _userService;
 		private readonly IFileStorageService _fileStorageService;
@@ -35,6 +33,7 @@ namespace MakeenCo_Work.Controllers
 			return Ok(user);
 		}
 
+		
 		[HttpGet]
 		public async Task<IActionResult> GetAllAsync([FromQuery] int pageNumber = 1 , [FromQuery] int pageSize = 10)
 		{
@@ -90,6 +89,7 @@ namespace MakeenCo_Work.Controllers
 			return NoContent();
 		}
 
+		
 		[HttpPatch("{id}/Deactivate")]  //[Authorize(Roles = "Admin")]
 		public async Task<IActionResult> DeactivateAsync(Guid id)
 		{
@@ -118,30 +118,20 @@ namespace MakeenCo_Work.Controllers
 		public async Task<IActionResult> RegisterByAdminWithFiles([FromForm] AdminRegisterUserCommand command
 			, [FromForm] List<IFormFile>? files)
 		{
-			try
-			{
-				var user = await _userService.RegisterByAdminAsync(command);
+			var user = await _userService.RegisterByAdminAsync(command);
 
-				//UploadFile
-				if (files is not null && files.Count > 0)
+			if (files is not null && files.Count > 0)
+			{
+				var oploadedFiles = await _fileStorageService.UploadUserFilesAsync(user.Id, files);
+
+				return Ok(new
 				{
-					var uploadedFiles = await _fileStorageService.UploadUserFilesAsync(user.Id, files);
-
-					//If Need To Store The File In DataBase
-
-					return Ok(new
-					{
-						User = user,
-						uploadedFiles = uploadedFiles
-					});
-				}
-
-				return Ok(user);
+					User = user,
+					uploadedFiles = oploadedFiles
+				});
 			}
-			catch(Exception ex)
-			{
-				return BadRequest(new { Message = ex.Message });
-			}
+
+			return Ok(user);
 		}
 
 
@@ -157,21 +147,14 @@ namespace MakeenCo_Work.Controllers
 			if (!allowedExtensions.Contains(fileExtension))
 				return BadRequest(new { Message = " Only CSV File Are Allowed" });
 
-			try
-			{
-				var result = await _bulkUserService.ProcessBulkUserUploadAsync(file);
+			var result = await _bulkUserService.ProcessBulkUserUploadAsync(file);
 
-				return Ok(new
-				{
-					Message = $"Processed {result.TotalRecords} records . Success : {result.SuccessCount}, Failed : {result.FailureCount}",
-					Result = result
-				});
-			}
-			catch(Exception ex)
+			return Ok(new
 			{
-				return BadRequest(new { Message = ex.Message });
-			}
+				Message =
+					$"Processed {result.TotalRecords} records . Success : {result.SuccessCount} , Failed : {result.FailureCount}",
+				Result = result
+			});
 		}
     }
 }
-

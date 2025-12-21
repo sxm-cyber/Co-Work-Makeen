@@ -1,13 +1,10 @@
 ﻿using MakeenCo_Work.Application.Command;
 using MakeenCo_Work.Application.IServices;
-using MakeenCo_Work.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MakeenCo_Work.Controllers
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class RegulationsController : ControllerBase
+    public class RegulationsController : BaseApiController
     {
         private readonly IRegulationService _regulationService;
 

@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MakeenCo_Work.Controllers
 {
-    [ApiController, Route("api/[controller]"), Authorize(Roles = "Admin")]
-    public class TieredDiscountController : ControllerBase
+    [Authorize(Roles = "Admin")]
+    public class TieredDiscountController : BaseApiController
 	{
 		private readonly ITieredDiscountService _tieredDiscountService;
 

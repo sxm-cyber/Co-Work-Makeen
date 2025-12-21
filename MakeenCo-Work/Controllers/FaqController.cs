@@ -4,9 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MakeenCo_Work.Controllers
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class FaqController:ControllerBase
+    public class FaqController : BaseApiController
     {
         private readonly IFaqService _faqService;
         public FaqController(IFaqService faqService)
@@ -14,8 +12,7 @@ namespace MakeenCo_Work.Controllers
             _faqService = faqService;
         }
         [HttpPost]
-        public async Task<IActionResult> CreateAsync(
-            [FromBody] CreateFaqCommand command)
+        public async Task<IActionResult> CreateAsyn([FromBody] CreateFaqCommand command)
         {
             await _faqService.CreateFaqAsync(command);
             return Ok();

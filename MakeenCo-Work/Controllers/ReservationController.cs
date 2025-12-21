@@ -2,11 +2,9 @@
 using MakeenCo_Work.Application.Commands;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MakeenCo_Work.API.Controllers
+namespace MakeenCo_Work.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ReservationController : ControllerBase
+    public class ReservationController : BaseApiController
     {
         private readonly IReservationService _service;
 
@@ -14,15 +12,18 @@ namespace MakeenCo_Work.API.Controllers
         {
             _service = service;
         }
+        
         [HttpGet]
         public async Task<IActionResult> GetAll() =>
             Ok(await _service.GetAllAsync());
+        
         [HttpPost]
         public async Task<IActionResult> Create(CreateReservationCommand command)
         {
             var result = await _service.CreateAsync(command);
             return Ok(result);
         }
+        
         [HttpPut("{id}/confirm")]
         public async Task<IActionResult> Confirm(Guid id)
         {
@@ -30,6 +31,7 @@ namespace MakeenCo_Work.API.Controllers
             if (result == null) return NotFound();
             return Ok(result);
         }
+        
         [HttpPut("{id}/cancel")]
         public async Task<IActionResult> Cancel(Guid id, CancelCommand command)
         {

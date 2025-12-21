@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MakeenCo_Work.Application.Interfaces;
 using MakeenCo_Work.Application.Commands.BlogPosts;
+using MakeenCo_Work.Controllers;
 
-[Route("api/[controller]")]
-[ApiController]
-public class BlogPostController : ControllerBase
+public class BlogPostController : BaseApiController
 {
     private readonly IBlogPostService _service;
     private readonly IWebHostEnvironment _env;
